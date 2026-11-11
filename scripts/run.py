@@ -11,7 +11,14 @@ OAI_OVERRIDES = {
     'oai-1.0.1-pass-bnpl-example': 'Uses $response.body.redirectAuthToken and $response.headers.Location; the runtime expression ABNF allows only $response.body#/<json-pointer> and $response.header.<name>.',
     'oai-1.0.1-pass-oauth-example': 'A jsonpath criterion with condition "$.access_token != null" is not a JSONPath query; a comparison needs a filter selector.',
     'oai-1.0.1-pass-pet-coupons-example': 'Sets a Reusable Object value to the integer 1 and 10; the 1.0.1 spec types value as a string.',
+    'oai-1.1.0-pass-bnpl-example': 'Uses $response.body.redirectAuthToken and $response.headers.Location; the runtime expression ABNF allows only $response.body#/<json-pointer> and $response.header.<name>.',
+    'oai-1.1.0-pass-oauth-example': 'A jsonpath criterion with condition "$.access_token != null" is not a JSONPath query; a comparison needs a filter selector.',
+    'oai-1.1.0-pass-async-depends-on': 'Uses $message.payload.userId; the ABNF allows only payload#/<json-pointer> after payload.',
+    'oai-1.1.0-pass-async-depends-on-cross-workflow': 'Uses $message.payload.<name>; the ABNF allows only payload#/<json-pointer> after payload.',
+    'oai-1.1.0-pass-openapi-and-asyncapi': 'Uses $message.payload.orderId; the ABNF allows only payload#/<json-pointer> after payload.',
 }
+# The 1.1.0 spec types a Reusable Object value as a string; OAI's own tests pass every other JSON type. Shown, not scored.
+VALUE_CONTESTED = 'Contested, not scored: the 1.1.0 spec types a Reusable Object value as string, while OAI\'s 1.1.0 tests pass non-string values.'
 SUITE = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 def load_cases():
@@ -32,6 +39,8 @@ def load_cases():
     for c in cases:
         if c['id'] in OAI_OVERRIDES:
             c.update(expect='invalid', level='semantic', note=OAI_OVERRIDES[c['id']])
+        elif re.match(r'oai-1\.1\.0-pass-(reusable-parameter-(array|boolean|integer|null|number|object)-value|pet-coupons-example|openapi-parameter-reusable-reference|workflow-parameter-reusable-reference)$', c['id']):
+            c.update(expect='contested', note=VALUE_CONTESTED)
         try: c['declared'] = str((yaml.safe_load(open(c['path'])) or {}).get('arazzo'))
         except Exception: c['declared'] = None
     return cases
@@ -52,7 +61,8 @@ def main():
         if k == '--only': only = set(a.pop(0).split(','))
         elif k == '--date': date = a.pop(0)
         elif k == '--tools': tooldir = a.pop(0)
-    env = {'suite': SUITE, 'node': f'{tooldir}/node', 'nb': f'{tooldir}/node/node_modules/.bin', 'py': f'{tooldir}/py/bin', 'go': f'{tooldir}/go'}
+    env = {'suite': SUITE, 'node': f'{tooldir}/node', 'nb': f'{tooldir}/node/node_modules/.bin', 'py': f'{tooldir}/py/bin', 'go': f'{tooldir}/go',
+           'unode': f'{tooldir}/node-usearazzo', 'ub': f'{tooldir}/node-usearazzo/node_modules/.bin'}
     shutil.copy(f'{SUITE}/scripts/schema-check.mjs', env['node'])
     tools = [t for t in yaml.safe_load(open(f'{SUITE}/tools.yml'))['tools'] if not only or t['id'] in only]
     cases = load_cases()
@@ -73,7 +83,7 @@ def main():
                 verdict = 'unsupported' if c.get('declared') in RELEASED else 'invalid'
             else: verdict = 'valid' if code == 0 else 'invalid'
             rows.append({'tool': t['id'], 'case': c['id'], 'suite': c['suite'], 'version': c['version'], 'level': c['level'], 'expect': c['expect'],
-                         'verdict': verdict, 'pass': verdict == c['expect'], 'exit': code, 'tail': out.replace(SUITE, '.')[-600:]})
+                         'verdict': verdict, 'pass': None if c['expect'] == 'contested' else verdict == c['expect'], 'exit': code, 'tail': out.replace(SUITE, '.')[-600:]})
             print(f"{t['id']:18s} {c['id'][:60]:60s} expect={c['expect']:7s} got={verdict:7s} {'ok' if verdict == c['expect'] else 'MISS'}")
     doc = {'date': date, 'tools': meta, 'cases': [{k: c[k] for k in ('id', 'suite', 'version', 'level', 'expect', 'rule', 'spec', 'file', 'note') if k in c} for c in cases], 'results': rows}
     os.makedirs(f'{SUITE}/results', exist_ok=True); os.makedirs(f'{SUITE}/docs/data', exist_ok=True)

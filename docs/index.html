@@ -47,11 +47,11 @@ td.c{text-align:center;white-space:nowrap;cursor:help}
 <div class="controls">
   <select id="fv"><option value="">All versions</option></select>
   <select id="fl"><option value="">Schema + semantic</option><option>schema</option><option>semantic</option></select>
-  <select id="fe"><option value="">Valid + invalid</option><option>valid</option><option>invalid</option></select>
+  <select id="fe"><option value="">Valid + invalid</option><option>valid</option><option>invalid</option><option>contested</option></select>
   <input id="fq" placeholder="Filter cases" size="18">
 </div>
 <div class="scroll"><table id="grid"></table></div>
-<p class="note">✓ right verdict · ✗ wrong verdict · — tool declined the document's Arazzo version · ! tool crashed. Hover a cell for the tool's output.</p>
+<p class="note">✓ right verdict · ✗ wrong verdict · — tool declined the document's Arazzo version · ! tool crashed · ○ contested, shown but not scored. Hover a cell for the tool's output.</p>
 <h2>Execution</h2>
 <p>Validation asks whether a tool reads a document correctly; execution asks whether a runner does what the workflow says. Each case runs one workflow against a mock petstore that records every request. A case passes when the run ends the way the spec says it should <b>and</b> the mock saw exactly the expected requests, in order, carrying the expected values. Contested cases are run and shown but not scored.</p>
 <div class="cards" id="xcards"></div>
@@ -71,7 +71,7 @@ fetch('data/latest.json').then(r => r.json()).then(d => {
     const m = d.tools[t];
     if (m.skipped) return `<div class="card"><h3><a href="${esc(m.repo)}">${esc(m.name)}</a><span class="tag">not run</span></h3><div class="note">${esc(m.notes)}</div></div>`;
     const rows = versions.map(v => {
-      const rs = d.results.filter(r => r.tool === t && r.version === v);
+      const rs = d.results.filter(r => r.tool === t && r.version === v && r.pass !== null);
       const unsup = rs.filter(r => r.verdict === 'unsupported').length;
       if (unsup > rs.length / 2) return `<div class="row"><span>Arazzo ${v}</span><span class="muted">version not supported</span></div>`;
       const run = rs.filter(r => r.verdict !== 'unsupported');
@@ -92,7 +92,7 @@ fetch('data/latest.json').then(r => r.json()).then(d => {
     $('grid').innerHTML = `<tr><th class="case">Case</th><th>Ver</th><th>Expect</th>${tools.map(t => `<th>${esc(d.tools[t].name.split(' (')[0])}</th>`).join('')}</tr>` +
       cs.map(c => `<tr><td class="case"><a href="https://github.com/api-evangelist/arazzo-conformance/blob/main/${esc(c.file)}"><code>${esc(c.id)}</code></a><small>${esc(c.rule)} · ${c.level} · <a href="${esc(c.spec)}">spec</a></small>${c.note ? `<small>${esc(c.note)}</small>` : ''}</td><td>${c.version}</td><td>${c.expect}</td>` +
         tools.map(t => { const r = R[t + '|' + c.id]; if (!r) return '<td></td>';
-          const [cls, sym] = r.verdict === 'unsupported' ? ['na', '—'] : ['error', 'timeout'].includes(r.verdict) ? ['miss', '!'] : r.pass ? ['ok', '✓'] : ['miss', '✗'];
+          const [cls, sym] = r.pass === null ? ['na', '○ ' + r.verdict] : r.verdict === 'unsupported' ? ['na', '—'] : ['error', 'timeout'].includes(r.verdict) ? ['miss', '!'] : r.pass ? ['ok', '✓'] : ['miss', '✗'];
           return `<td class="c ${cls}" title="${esc(r.verdict + ' (exit ' + r.exit + ')\n' + r.tail.slice(-400))}">${sym}</td>`; }).join('') + '</tr>').join('');
   };
   ['fv', 'fl', 'fe'].forEach(id => $(id).onchange = draw); $('fq').oninput = draw; draw();

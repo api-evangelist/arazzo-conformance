@@ -3,7 +3,7 @@
 A case passes when the run's outcome matches `expect` (success | failure | any; contested = run and shown, not scored) AND the mock saw exactly `requests`,
 in order, carrying the `match` values. Writes results/exec-<date>.json and docs/data/exec-latest.json.
 Usage: run-exec.py [--tools TOOLDIR] [--only id,id] [--date YYYY-MM-DD]"""
-import datetime, glob, json, os, re, shlex, subprocess, sys, time, urllib.request, yaml
+import datetime, glob, json, os, re, shlex, shutil, subprocess, sys, time, urllib.request, yaml
 
 SUITE = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 MOCK = 'http://127.0.0.1:4010'
@@ -44,7 +44,9 @@ def main():
         if k == '--only': only = set(a.pop(0).split(','))
         elif k == '--date': date = a.pop(0)
         elif k == '--tools': tooldir = a.pop(0)
-    env = {'suite': SUITE, 'node': f'{tooldir}/node', 'nb': f'{tooldir}/node/node_modules/.bin', 'py': f'{tooldir}/py/bin', 'go': f'{tooldir}/go'}
+    env = {'suite': SUITE, 'node': f'{tooldir}/node', 'nb': f'{tooldir}/node/node_modules/.bin', 'py': f'{tooldir}/py/bin', 'go': f'{tooldir}/go',
+           'unode': f'{tooldir}/node-usearazzo', 'ub': f'{tooldir}/node-usearazzo/node_modules/.bin'}
+    shutil.copy(f'{SUITE}/scripts/usearazzo-run.mjs', env['unode'])
     runners = [t for t in yaml.safe_load(open(f'{SUITE}/tools.yml'))['runners'] if not only or t['id'] in only]
     cases = []
     for m in sorted(glob.glob(f'{SUITE}/cases/exec/*/manifest.yml')):

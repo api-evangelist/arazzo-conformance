@@ -12,6 +12,12 @@
    "repo": "https://github.com/jentic/arazzo-engine",
    "notes": "",
    "version": "Version: 0.9.6"
+  },
+  "usearazzo-runner": {
+   "name": "UseArazzo runner",
+   "repo": "https://github.com/usearazzo/arazzo-toolkit",
+   "notes": "A library with no CLI; scripts/usearazzo-run.mjs calls ArazzoRunner.load and execute.",
+   "version": "1.0.1-alpha.29"
   }
  },
  "cases": [
@@ -346,7 +352,7 @@
    "pass": true,
    "why": "",
    "exit": 0,
-   "tail": "al\n\u00a0\u00a0Time: 25ms \n \n \n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 Filename                                                            \u2502 Workflows  \u2502 Passed  \u2502 Failed  \u2502 Warnings \u2502\n\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524\n\u2502 \u2713 query-parameter.arazzo.yaml                                       \u2502 1          \u2502 1       \u2502 -       \u2502 -        \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518"
+   "tail": "al\n\u00a0\u00a0Time: 24ms \n \n \n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 Filename                                                            \u2502 Workflows  \u2502 Passed  \u2502 Failed  \u2502 Warnings \u2502\n\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524\n\u2502 \u2713 query-parameter.arazzo.yaml                                       \u2502 1          \u2502 1       \u2502 -       \u2502 -        \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518"
   },
   {
    "tool": "redocly-respect",
@@ -358,7 +364,7 @@
    "pass": true,
    "why": "",
    "exit": 0,
-   "tail": "Time: 25ms \n \n \n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 Filename                                                             \u2502 Workflows  \u2502 Passed  \u2502 Failed  \u2502 Warnings \u2502\n\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524\n\u2502 \u2713 header-parameter.arazzo.yaml                                       \u2502 1          \u2502 1       \u2502 -       \u2502 -        \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518"
+   "tail": "Time: 24ms \n \n \n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 Filename                                                             \u2502 Workflows  \u2502 Passed  \u2502 Failed  \u2502 Warnings \u2502\n\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524\n\u2502 \u2713 header-parameter.arazzo.yaml                                       \u2502 1          \u2502 1       \u2502 -       \u2502 -        \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518"
   },
   {
    "tool": "redocly-respect",
@@ -445,7 +451,7 @@
    "pass": true,
    "why": "",
    "exit": 0,
-   "tail": "4 total\n\u00a0\u00a0Time: 55ms \n \n \n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 Filename                                                           \u2502 Workflows  \u2502 Passed  \u2502 Failed  \u2502 Warnings \u2502\n\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524\n\u2502 \u2713 on-success-end.arazzo.yaml                                       \u2502 1          \u2502 1       \u2502 -       \u2502 -        \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518"
+   "tail": "4 total\n\u00a0\u00a0Time: 54ms \n \n \n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 Filename                                                           \u2502 Workflows  \u2502 Passed  \u2502 Failed  \u2502 Warnings \u2502\n\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524\n\u2502 \u2713 on-success-end.arazzo.yaml                                       \u2502 1          \u2502 1       \u2502 -       \u2502 -        \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518"
   },
   {
    "tool": "redocly-respect",
@@ -472,7 +478,7 @@
    "pass": true,
    "why": "",
    "exit": 0,
-   "tail": "Time: 63ms \n \n \n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 Filename                                                             \u2502 Workflows  \u2502 Passed  \u2502 Failed  \u2502 Warnings \u2502\n\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524\n\u2502 \u2713 on-failure-retry.arazzo.yaml                                       \u2502 1          \u2502 1       \u2502 -       \u2502 -        \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518"
+   "tail": "Time: 59ms \n \n \n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 Filename                                                             \u2502 Workflows  \u2502 Passed  \u2502 Failed  \u2502 Warnings \u2502\n\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524\n\u2502 \u2713 on-failure-retry.arazzo.yaml                                       \u2502 1          \u2502 1       \u2502 -       \u2502 -        \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518"
   },
   {
    "tool": "redocly-respect",
@@ -513,7 +519,7 @@
    "pass": true,
    "why": "",
    "exit": 0,
-   "tail": "ed, 12 total\n\u00a0\u00a0Time: 62ms \n \n \n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 Filename                                                          \u2502 Workflows  \u2502 Passed  \u2502 Failed  \u2502 Warnings \u2502\n\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524\n\u2502 \u2713 workflow-step.arazzo.yaml                                       \u2502 1          \u2502 1       \u2502 -       \u2502 -        \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518"
+   "tail": "ed, 12 total\n\u00a0\u00a0Time: 60ms \n \n \n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 Filename                                                          \u2502 Workflows  \u2502 Passed  \u2502 Failed  \u2502 Warnings \u2502\n\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524\n\u2502 \u2713 workflow-step.arazzo.yaml                                       \u2502 1          \u2502 1       \u2502 -       \u2502 -        \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518"
   },
   {
    "tool": "arazzo-runner",
@@ -526,7 +532,7 @@
    "pass": true,
    "why": "",
    "exit": 0,
-   "tail": "40:46,428 - arazzo-runner - INFO - ===== EXECUTING STEP: fetch =====\n2026-11-11 16:40:46,429 - arazzo-runner.executor - INFO - Response status code: 200\n2026-11-11 16:40:46,429 - arazzo-runner.executor - INFO - Step fetch has 0 onSuccess actions\n2026-11-11 16:40:46,429 - arazzo-runner.executor - INFO - No matching action for step fetch, continuing to next step\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=workflow_complete, workflow_id='run', outputs={}, step_outputs={'create': {'petId': 'pet-1'}, 'fetch': {'status': 'available'}}, inputs={'name': 'Rex'}, error=None)"
+   "tail": "07:00,016 - arazzo-runner - INFO - ===== EXECUTING STEP: fetch =====\n2026-11-11 17:07:00,017 - arazzo-runner.executor - INFO - Response status code: 200\n2026-11-11 17:07:00,017 - arazzo-runner.executor - INFO - Step fetch has 0 onSuccess actions\n2026-11-11 17:07:00,017 - arazzo-runner.executor - INFO - No matching action for step fetch, continuing to next step\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=workflow_complete, workflow_id='run', outputs={}, step_outputs={'create': {'petId': 'pet-1'}, 'fetch': {'status': 'available'}}, inputs={'name': 'Rex'}, error=None)"
   },
   {
    "tool": "arazzo-runner",
@@ -538,7 +544,7 @@
    "pass": true,
    "why": "",
    "exit": 0,
-   "tail": "ment.arazzo.yaml\n2026-11-11 16:40:46,598 - arazzo-runner - INFO - ===== EXECUTING STEP: create =====\n2026-11-11 16:40:46,602 - arazzo-runner.executor - INFO - Response status code: 201\n2026-11-11 16:40:46,602 - arazzo-runner.executor - INFO - Step create has 0 onSuccess actions\n2026-11-11 16:40:46,602 - arazzo-runner.executor - INFO - No matching action for step create, continuing to next step\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=workflow_complete, workflow_id='run', outputs={}, step_outputs={'create': {'petId': 'pet-1'}}, inputs={'name': 'Rex'}, error=None)"
+   "tail": "ment.arazzo.yaml\n2026-11-11 17:07:00,180 - arazzo-runner - INFO - ===== EXECUTING STEP: create =====\n2026-11-11 17:07:00,185 - arazzo-runner.executor - INFO - Response status code: 201\n2026-11-11 17:07:00,185 - arazzo-runner.executor - INFO - Step create has 0 onSuccess actions\n2026-11-11 17:07:00,185 - arazzo-runner.executor - INFO - No matching action for step create, continuing to next step\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=workflow_complete, workflow_id='run', outputs={}, step_outputs={'create': {'petId': 'pet-1'}}, inputs={'name': 'Rex'}, error=None)"
   },
   {
    "tool": "arazzo-runner",
@@ -550,7 +556,7 @@
    "pass": true,
    "why": "",
    "exit": 0,
-   "tail": "TING STEP: list =====\n2026-11-11 16:40:46,773 - arazzo-runner.executor - INFO - Response status code: 200\n2026-11-11 16:40:46,773 - arazzo-runner.executor - WARNING - No outputs were successfully extracted for step list\n2026-11-11 16:40:46,773 - arazzo-runner.executor - INFO - Step list has 0 onSuccess actions\n2026-11-11 16:40:46,773 - arazzo-runner.executor - INFO - No matching action for step list, continuing to next step\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=workflow_complete, workflow_id='run', outputs={}, step_outputs={'list': {}}, inputs={}, error=None)"
+   "tail": "TING STEP: list =====\n2026-11-11 17:07:00,351 - arazzo-runner.executor - INFO - Response status code: 200\n2026-11-11 17:07:00,351 - arazzo-runner.executor - WARNING - No outputs were successfully extracted for step list\n2026-11-11 17:07:00,351 - arazzo-runner.executor - INFO - Step list has 0 onSuccess actions\n2026-11-11 17:07:00,351 - arazzo-runner.executor - INFO - No matching action for step list, continuing to next step\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=workflow_complete, workflow_id='run', outputs={}, step_outputs={'list': {}}, inputs={}, error=None)"
   },
   {
    "tool": "arazzo-runner",
@@ -562,7 +568,7 @@
    "pass": true,
    "why": "",
    "exit": 0,
-   "tail": "TING STEP: list =====\n2026-11-11 16:40:46,945 - arazzo-runner.executor - INFO - Response status code: 200\n2026-11-11 16:40:46,945 - arazzo-runner.executor - WARNING - No outputs were successfully extracted for step list\n2026-11-11 16:40:46,945 - arazzo-runner.executor - INFO - Step list has 0 onSuccess actions\n2026-11-11 16:40:46,945 - arazzo-runner.executor - INFO - No matching action for step list, continuing to next step\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=workflow_complete, workflow_id='run', outputs={}, step_outputs={'list': {}}, inputs={}, error=None)"
+   "tail": "TING STEP: list =====\n2026-11-11 17:07:00,516 - arazzo-runner.executor - INFO - Response status code: 200\n2026-11-11 17:07:00,516 - arazzo-runner.executor - WARNING - No outputs were successfully extracted for step list\n2026-11-11 17:07:00,516 - arazzo-runner.executor - INFO - Step list has 0 onSuccess actions\n2026-11-11 17:07:00,516 - arazzo-runner.executor - INFO - No matching action for step list, continuing to next step\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=workflow_complete, workflow_id='run', outputs={}, step_outputs={'list': {}}, inputs={}, error=None)"
   },
   {
    "tool": "arazzo-runner",
@@ -574,7 +580,7 @@
    "pass": true,
    "why": "",
    "exit": 0,
-   "tail": "ng runner with Arazzo file: ./cases/exec/1.0.1/success-criteria-fail.arazzo.yaml\n2026-11-11 16:40:47,122 - arazzo-runner - INFO - ===== EXECUTING STEP: create =====\n2026-11-11 16:40:47,126 - arazzo-runner.executor - INFO - Response status code: 201\n2026-11-11 16:40:47,126 - arazzo-runner.executor - WARNING - No matching failure action for step create, ending workflow with failure\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=error, workflow_id='run', outputs={}, step_outputs={'create': {'petId': 'pet-1'}}, inputs={'name': 'Rex'}, error='Step failed success criteria')"
+   "tail": "ng runner with Arazzo file: ./cases/exec/1.0.1/success-criteria-fail.arazzo.yaml\n2026-11-11 17:07:00,676 - arazzo-runner - INFO - ===== EXECUTING STEP: create =====\n2026-11-11 17:07:00,680 - arazzo-runner.executor - INFO - Response status code: 201\n2026-11-11 17:07:00,680 - arazzo-runner.executor - WARNING - No matching failure action for step create, ending workflow with failure\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=error, workflow_id='run', outputs={}, step_outputs={'create': {'petId': 'pet-1'}}, inputs={'name': 'Rex'}, error='Step failed success criteria')"
   },
   {
    "tool": "arazzo-runner",
@@ -587,7 +593,7 @@
    "pass": true,
    "why": "",
    "exit": 0,
-   "tail": "40:47,306 - arazzo-runner - INFO - ===== EXECUTING STEP: fetch =====\n2026-11-11 16:40:47,307 - arazzo-runner.executor - INFO - Response status code: 200\n2026-11-11 16:40:47,307 - arazzo-runner.executor - INFO - Step fetch has 0 onSuccess actions\n2026-11-11 16:40:47,307 - arazzo-runner.executor - INFO - No matching action for step fetch, continuing to next step\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=workflow_complete, workflow_id='run', outputs={}, step_outputs={'create': {'petId': 'pet-1'}, 'fetch': {'status': 'available'}}, inputs={'name': 'Rex'}, error=None)"
+   "tail": "07:00,845 - arazzo-runner - INFO - ===== EXECUTING STEP: fetch =====\n2026-11-11 17:07:00,846 - arazzo-runner.executor - INFO - Response status code: 200\n2026-11-11 17:07:00,846 - arazzo-runner.executor - INFO - Step fetch has 0 onSuccess actions\n2026-11-11 17:07:00,846 - arazzo-runner.executor - INFO - No matching action for step fetch, continuing to next step\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=workflow_complete, workflow_id='run', outputs={}, step_outputs={'create': {'petId': 'pet-1'}, 'fetch': {'status': 'available'}}, inputs={'name': 'Rex'}, error=None)"
   },
   {
    "tool": "arazzo-runner",
@@ -600,7 +606,7 @@
    "pass": true,
    "why": "",
    "exit": 1,
-   "tail": " action for step create, continuing to next step\n2026-11-11 16:40:47,480 - arazzo-runner - INFO - ===== EXECUTING STEP: fetch =====\n2026-11-11 16:40:47,481 - arazzo-runner.executor - INFO - Response status code: 200\n2026-11-11 16:40:47,481 - arazzo-runner.executor - WARNING - No matching failure action for step fetch, ending workflow with failure\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=error, workflow_id='run', outputs={}, step_outputs={'create': {'petId': 'pet-1'}, 'fetch': {'status': 'available'}}, inputs={'name': 'Rex'}, error='Step failed success criteria')"
+   "tail": " action for step create, continuing to next step\n2026-11-11 17:07:01,014 - arazzo-runner - INFO - ===== EXECUTING STEP: fetch =====\n2026-11-11 17:07:01,015 - arazzo-runner.executor - INFO - Response status code: 200\n2026-11-11 17:07:01,015 - arazzo-runner.executor - WARNING - No matching failure action for step fetch, ending workflow with failure\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=error, workflow_id='run', outputs={}, step_outputs={'create': {'petId': 'pet-1'}, 'fetch': {'status': 'available'}}, inputs={'name': 'Rex'}, error='Step failed success criteria')"
   },
   {
    "tool": "arazzo-runner",
@@ -612,7 +618,7 @@
    "pass": true,
    "why": "",
    "exit": 1,
-   "tail": "ing runner with Arazzo file: ./cases/exec/1.0.1/regex-criterion-fail.arazzo.yaml\n2026-11-11 16:40:47,648 - arazzo-runner - INFO - ===== EXECUTING STEP: create =====\n2026-11-11 16:40:47,652 - arazzo-runner.executor - INFO - Response status code: 201\n2026-11-11 16:40:47,652 - arazzo-runner.executor - WARNING - No matching failure action for step create, ending workflow with failure\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=error, workflow_id='run', outputs={}, step_outputs={'create': {'petId': 'pet-1'}}, inputs={'name': 'Rex'}, error='Step failed success criteria')"
+   "tail": "ing runner with Arazzo file: ./cases/exec/1.0.1/regex-criterion-fail.arazzo.yaml\n2026-11-11 17:07:01,178 - arazzo-runner - INFO - ===== EXECUTING STEP: create =====\n2026-11-11 17:07:01,182 - arazzo-runner.executor - INFO - Response status code: 201\n2026-11-11 17:07:01,183 - arazzo-runner.executor - WARNING - No matching failure action for step create, ending workflow with failure\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=error, workflow_id='run', outputs={}, step_outputs={'create': {'petId': 'pet-1'}}, inputs={'name': 'Rex'}, error='Step failed success criteria')"
   },
   {
    "tool": "arazzo-runner",
@@ -624,7 +630,7 @@
    "pass": true,
    "why": "",
    "exit": 1,
-   "tail": "er.executor - INFO - JSONPath matches: []\n2026-11-11 16:40:47,825 - arazzo-runner.executor - WARNING - JSONPath condition returned no matches: $[?(@.name == 'Rex')]\n2026-11-11 16:40:47,825 - arazzo-runner.executor - INFO - Response status code: 201\n2026-11-11 16:40:47,825 - arazzo-runner.executor - WARNING - No matching failure action for step create, ending workflow with failure\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=error, workflow_id='run', outputs={}, step_outputs={'create': {'petId': 'pet-1'}}, inputs={'name': 'Rex'}, error='Step failed success criteria')"
+   "tail": "er.executor - INFO - JSONPath matches: []\n2026-11-11 17:07:01,356 - arazzo-runner.executor - WARNING - JSONPath condition returned no matches: $[?(@.name == 'Rex')]\n2026-11-11 17:07:01,356 - arazzo-runner.executor - INFO - Response status code: 201\n2026-11-11 17:07:01,356 - arazzo-runner.executor - WARNING - No matching failure action for step create, ending workflow with failure\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=error, workflow_id='run', outputs={}, step_outputs={'create': {'petId': 'pet-1'}}, inputs={'name': 'Rex'}, error='Step failed success criteria')"
   },
   {
    "tool": "arazzo-runner",
@@ -637,7 +643,7 @@
    "pass": true,
    "why": "",
    "exit": 0,
-   "tail": "13 - arazzo-runner.executor - INFO - Response status code: 200\n2026-11-11 16:40:48,013 - arazzo-runner.executor - WARNING - No outputs were successfully extracted for step list\n2026-11-11 16:40:48,013 - arazzo-runner.executor - INFO - Step list has 0 onSuccess actions\n2026-11-11 16:40:48,013 - arazzo-runner.executor - INFO - No matching action for step list, continuing to next step\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=workflow_complete, workflow_id='run', outputs={}, step_outputs={'create': {'petId': 'pet-1'}, 'list': {}}, inputs={'name': 'Rex'}, error=None)"
+   "tail": "30 - arazzo-runner.executor - INFO - Response status code: 200\n2026-11-11 17:07:01,530 - arazzo-runner.executor - WARNING - No outputs were successfully extracted for step list\n2026-11-11 17:07:01,530 - arazzo-runner.executor - INFO - Step list has 0 onSuccess actions\n2026-11-11 17:07:01,530 - arazzo-runner.executor - INFO - No matching action for step list, continuing to next step\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=workflow_complete, workflow_id='run', outputs={}, step_outputs={'create': {'petId': 'pet-1'}, 'list': {}}, inputs={'name': 'Rex'}, error=None)"
   },
   {
    "tool": "arazzo-runner",
@@ -649,7 +655,7 @@
    "pass": true,
    "why": "",
    "exit": 0,
-   "tail": "FO - ===== EXECUTING STEP: create =====\n2026-11-11 16:40:48,188 - arazzo-runner.executor - INFO - Response status code: 201\n2026-11-11 16:40:48,188 - arazzo-runner.executor - INFO - Step create has 1 onSuccess actions\n2026-11-11 16:40:48,188 - arazzo-runner.executor - INFO - Checking action stop of type end\n2026-11-11 16:40:48,188 - arazzo-runner.executor - INFO - Action stop ends the workflow\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=workflow_complete, workflow_id='run', outputs={}, step_outputs={'create': {'petId': 'pet-1'}}, inputs={'name': 'Rex'}, error=None)"
+   "tail": "FO - ===== EXECUTING STEP: create =====\n2026-11-11 17:07:01,702 - arazzo-runner.executor - INFO - Response status code: 201\n2026-11-11 17:07:01,702 - arazzo-runner.executor - INFO - Step create has 1 onSuccess actions\n2026-11-11 17:07:01,702 - arazzo-runner.executor - INFO - Checking action stop of type end\n2026-11-11 17:07:01,702 - arazzo-runner.executor - INFO - Action stop ends the workflow\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=workflow_complete, workflow_id='run', outputs={}, step_outputs={'create': {'petId': 'pet-1'}}, inputs={'name': 'Rex'}, error=None)"
   },
   {
    "tool": "arazzo-runner",
@@ -662,7 +668,7 @@
    "pass": true,
    "why": "",
    "exit": 0,
-   "tail": "40:48,363 - arazzo-runner - INFO - ===== EXECUTING STEP: fetch =====\n2026-11-11 16:40:48,364 - arazzo-runner.executor - INFO - Response status code: 200\n2026-11-11 16:40:48,364 - arazzo-runner.executor - INFO - Step fetch has 0 onSuccess actions\n2026-11-11 16:40:48,364 - arazzo-runner.executor - INFO - No matching action for step fetch, continuing to next step\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=workflow_complete, workflow_id='run', outputs={}, step_outputs={'create': {'petId': 'pet-1'}, 'fetch': {'status': 'available'}}, inputs={'name': 'Rex'}, error=None)"
+   "tail": "07:01,881 - arazzo-runner - INFO - ===== EXECUTING STEP: fetch =====\n2026-11-11 17:07:01,882 - arazzo-runner.executor - INFO - Response status code: 200\n2026-11-11 17:07:01,882 - arazzo-runner.executor - INFO - Step fetch has 0 onSuccess actions\n2026-11-11 17:07:01,882 - arazzo-runner.executor - INFO - No matching action for step fetch, continuing to next step\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=workflow_complete, workflow_id='run', outputs={}, step_outputs={'create': {'petId': 'pet-1'}, 'fetch': {'status': 'available'}}, inputs={'name': 'Rex'}, error=None)"
   },
   {
    "tool": "arazzo-runner",
@@ -675,7 +681,7 @@
    "pass": false,
    "why": "outcome failure, expected success; requests ['POST /pets', 'GET /pets/pet-1'], expected ['POST /pets', 'GET /pets/pet-1', 'GET /pets/pet-1']",
    "exit": 1,
-   "tail": "on failed: $statusCode == 404\n2026-11-11 16:40:48,540 - arazzo-runner.executor - INFO - Failure action again criteria not met, skipping\n2026-11-11 16:40:48,540 - arazzo-runner.executor - WARNING - No matching failure action for step fetch, ending workflow with failure\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=error, workflow_id='run', outputs={}, step_outputs={'create': {'petId': 'pet-1'}, 'fetch': {'runner_error_context': {'http_code': 404, 'http_response': {'message': 'not yet'}}, 'status': None}}, inputs={'name': 'flaky'}, error='Step failed success criteria')"
+   "tail": "on failed: $statusCode == 404\n2026-11-11 17:07:02,051 - arazzo-runner.executor - INFO - Failure action again criteria not met, skipping\n2026-11-11 17:07:02,051 - arazzo-runner.executor - WARNING - No matching failure action for step fetch, ending workflow with failure\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=error, workflow_id='run', outputs={}, step_outputs={'create': {'petId': 'pet-1'}, 'fetch': {'runner_error_context': {'http_code': 404, 'http_response': {'message': 'not yet'}}, 'status': None}}, inputs={'name': 'flaky'}, error='Step failed success criteria')"
   },
   {
    "tool": "arazzo-runner",
@@ -687,7 +693,7 @@
    "pass": false,
    "why": "outcome success, expected failure; requests ['GET /pets/missing'], expected ['GET /pets/missing', 'GET /pets/missing', 'GET /pets/missing']",
    "exit": 0,
-   "tail": "26-11-11 16:40:48,714 - arazzo-runner.executor - WARNING - Non-2xx status code: 404. Adding error context to outputs.\n2026-11-11 16:40:48,714 - arazzo-runner.executor - INFO - Checking failure action again of type retry\n2026-11-11 16:40:48,714 - arazzo-runner.executor - INFO - Failure action again retries (after=0, limit=2)\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=workflow_complete, workflow_id='run', outputs={}, step_outputs={'fetch': {'runner_error_context': {'http_code': 404, 'http_response': {'message': 'not found'}}, 'status': None}}, inputs={}, error=None)"
+   "tail": "26-11-11 17:07:02,218 - arazzo-runner.executor - WARNING - Non-2xx status code: 404. Adding error context to outputs.\n2026-11-11 17:07:02,218 - arazzo-runner.executor - INFO - Checking failure action again of type retry\n2026-11-11 17:07:02,218 - arazzo-runner.executor - INFO - Failure action again retries (after=0, limit=2)\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=workflow_complete, workflow_id='run', outputs={}, step_outputs={'fetch': {'runner_error_context': {'http_code': 404, 'http_response': {'message': 'not found'}}, 'status': None}}, inputs={}, error=None)"
   },
   {
    "tool": "arazzo-runner",
@@ -700,7 +706,7 @@
    "pass": true,
    "why": "",
    "exit": 0,
-   "tail": "11 16:40:48,888 - arazzo-runner.executor - WARNING - No outputs were successfully extracted for step list\n2026-11-11 16:40:48,888 - arazzo-runner.executor - INFO - Step list has 0 onSuccess actions\n2026-11-11 16:40:48,888 - arazzo-runner.executor - INFO - No matching action for step list, continuing to next step\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=workflow_complete, workflow_id='run', outputs={}, step_outputs={'fetch': {'runner_error_context': {'http_code': 404, 'http_response': {'message': 'not found'}}, 'status': None}, 'list': {}}, inputs={}, error=None)"
+   "tail": "11 17:07:02,386 - arazzo-runner.executor - WARNING - No outputs were successfully extracted for step list\n2026-11-11 17:07:02,386 - arazzo-runner.executor - INFO - Step list has 0 onSuccess actions\n2026-11-11 17:07:02,386 - arazzo-runner.executor - INFO - No matching action for step list, continuing to next step\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=workflow_complete, workflow_id='run', outputs={}, step_outputs={'fetch': {'runner_error_context': {'http_code': 404, 'http_response': {'message': 'not found'}}, 'status': None}, 'list': {}}, inputs={}, error=None)"
   },
   {
    "tool": "arazzo-runner",
@@ -714,7 +720,211 @@
    "pass": true,
    "why": "",
    "exit": 0,
-   "tail": "p\n2026-11-11 16:40:49,063 - arazzo-runner - INFO - ===== EXECUTING STEP: again =====\n2026-11-11 16:40:49,064 - arazzo-runner.executor - INFO - Response status code: 200\n2026-11-11 16:40:49,064 - arazzo-runner.executor - INFO - Step again has 0 onSuccess actions\n2026-11-11 16:40:49,064 - arazzo-runner.executor - INFO - No matching action for step again, continuing to next step\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=workflow_complete, workflow_id='run', outputs={}, step_outputs={'sub': {'petId': 'pet-1'}, 'again': {'status': 'available'}}, inputs={}, error=None)"
+   "tail": "p\n2026-11-11 17:07:02,553 - arazzo-runner - INFO - ===== EXECUTING STEP: again =====\n2026-11-11 17:07:02,554 - arazzo-runner.executor - INFO - Response status code: 200\n2026-11-11 17:07:02,554 - arazzo-runner.executor - INFO - Step again has 0 onSuccess actions\n2026-11-11 17:07:02,554 - arazzo-runner.executor - INFO - No matching action for step again, continuing to next step\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=workflow_complete, workflow_id='run', outputs={}, step_outputs={'sub': {'petId': 'pet-1'}, 'again': {'status': 'available'}}, inputs={}, error=None)"
+  },
+  {
+   "tool": "usearazzo-runner",
+   "case": "exec-chain-output-to-path",
+   "outcome": "success",
+   "requests": [
+    "POST /pets",
+    "GET /pets/pet-1"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 0,
+   "tail": "ok create\nok fetch\nstatus: completed"
+  },
+  {
+   "tool": "usearazzo-runner",
+   "case": "exec-payload-replacement",
+   "outcome": "success",
+   "requests": [
+    "POST /pets"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 0,
+   "tail": "ok create\nstatus: completed"
+  },
+  {
+   "tool": "usearazzo-runner",
+   "case": "exec-query-parameter",
+   "outcome": "success",
+   "requests": [
+    "GET /pets"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 0,
+   "tail": "ok list\nstatus: completed"
+  },
+  {
+   "tool": "usearazzo-runner",
+   "case": "exec-header-parameter",
+   "outcome": "success",
+   "requests": [
+    "GET /pets"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 0,
+   "tail": "ok list\nstatus: completed"
+  },
+  {
+   "tool": "usearazzo-runner",
+   "case": "exec-success-criteria-fail",
+   "outcome": "failure",
+   "requests": [
+    "POST /pets"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 1,
+   "tail": "failed create\nstatus: failed"
+  },
+  {
+   "tool": "usearazzo-runner",
+   "case": "exec-body-condition-pass",
+   "outcome": "success",
+   "requests": [
+    "POST /pets",
+    "GET /pets/pet-1"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 0,
+   "tail": "ok create\nok fetch\nstatus: completed"
+  },
+  {
+   "tool": "usearazzo-runner",
+   "case": "exec-body-condition-fail",
+   "outcome": "failure",
+   "requests": [
+    "POST /pets",
+    "GET /pets/pet-1"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 1,
+   "tail": "ok create\nfailed fetch\nstatus: failed"
+  },
+  {
+   "tool": "usearazzo-runner",
+   "case": "exec-regex-criterion-fail",
+   "outcome": "failure",
+   "requests": [
+    "POST /pets"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 1,
+   "tail": "failed create\nstatus: failed"
+  },
+  {
+   "tool": "usearazzo-runner",
+   "case": "exec-jsonpath-filter-over-object",
+   "outcome": "failure",
+   "requests": [
+    "POST /pets"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 1,
+   "tail": "failed create\nstatus: failed"
+  },
+  {
+   "tool": "usearazzo-runner",
+   "case": "exec-jsonpath-filter-over-array",
+   "outcome": "success",
+   "requests": [
+    "POST /pets",
+    "GET /pets"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 0,
+   "tail": "ok create\nok list\nstatus: completed"
+  },
+  {
+   "tool": "usearazzo-runner",
+   "case": "exec-on-success-end",
+   "outcome": "success",
+   "requests": [
+    "POST /pets"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 0,
+   "tail": "ok create\nstatus: ended"
+  },
+  {
+   "tool": "usearazzo-runner",
+   "case": "exec-on-success-goto-skip",
+   "outcome": "success",
+   "requests": [
+    "POST /pets",
+    "GET /pets/pet-1"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 0,
+   "tail": "ok create\nok fetch\nstatus: completed"
+  },
+  {
+   "tool": "usearazzo-runner",
+   "case": "exec-on-failure-retry",
+   "outcome": "success",
+   "requests": [
+    "POST /pets",
+    "GET /pets/pet-1",
+    "GET /pets/pet-1"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 0,
+   "tail": "ok create\nok fetch\nstatus: completed"
+  },
+  {
+   "tool": "usearazzo-runner",
+   "case": "exec-retry-limit-exhausted",
+   "outcome": "failure",
+   "requests": [
+    "GET /pets/missing",
+    "GET /pets/missing",
+    "GET /pets/missing"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 1,
+   "tail": "failed fetch\nstatus: failed"
+  },
+  {
+   "tool": "usearazzo-runner",
+   "case": "exec-on-failure-goto-recover",
+   "outcome": "success",
+   "requests": [
+    "GET /pets/missing",
+    "GET /pets"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 0,
+   "tail": "failed fetch\nok list\nstatus: completed"
+  },
+  {
+   "tool": "usearazzo-runner",
+   "case": "exec-workflow-step",
+   "outcome": "success",
+   "requests": [
+    "POST /pets",
+    "GET /pets/pet-1",
+    "GET /pets/pet-1"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 0,
+   "tail": "ok sub\nok again\nstatus: completed"
   }
  ]
 }

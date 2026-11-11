@@ -1,6 +1,6 @@
 # The tools under test. {f} = the case file, {schema} = the official schema for the case's version,
 # schema-check.mjs is copied into {node} by run.py so it resolves ajv there.
-# {nb} = node_modules/.bin, {node} = the node tools dir, {py} = the python venv bin, {go} = the go bin dir, {suite} = this repo.
+# {nb} = node_modules/.bin, {node} = the node tools dir, {ub} / {unode} = the separate usearazzo install, {py} = the python venv bin, {go} = the go bin dir, {suite} = this repo.
 # claims: the Arazzo versions the tool says it supports (README, docs or its own version check); scores outside it are labelled.
 # role: validates = says valid/invalid; loads = only parses what it will run (a pass means it loaded, not that it checked).
 # A tool's verdict is its exit code: 0 = valid, non-zero = invalid, unless an `error` pattern says it crashed instead,
@@ -51,6 +51,15 @@ tools:
     cmd: "{py}/arazzo-runner list-workflows {f}"
     error: 'Traceback'
 
+  - id: usearazzo
+    claims: [1.0.0, 1.0.1, 1.1.0]
+    name: UseArazzo validator
+    repo: https://github.com/usearazzo/arazzo-toolkit
+    role: validates
+    version_cmd: "{ub}/usearazzo --version"
+    cmd: "{ub}/usearazzo validate --json-schema-validation {f}"
+    notes: "Run with --json-schema-validation, which is off by default. Installed on its own: it needs a newer @speclynx/apidom-ls than the 2.11.7 the Jentic validator is pinned to, and under that pin it reports no problems at all."
+
 # The execution tier (scripts/run-exec.py): whole workflows run against scripts/mock-petstore.py on 127.0.0.1:4010.
 # {workflow} = the workflow to run, {inputs} = the inputs as JSON, {inputs_kv} = the inputs as `-i key=value` flags.
 # A run succeeded when `success` matches the output; with no `success` pattern, when the exit code is 0.
@@ -66,3 +75,9 @@ runners:
     version_cmd: "{py}/pip show arazzo-runner | grep Version"
     cmd: "{py}/arazzo-runner execute-workflow {f} --workflow-id {workflow} --inputs '{inputs}'"
     success: 'WorkflowExecutionResult\(status=workflow_complete'
+  - id: usearazzo-runner
+    name: UseArazzo runner
+    repo: https://github.com/usearazzo/arazzo-toolkit
+    version_cmd: "node -p \"require('{unode}/node_modules/@usearazzo/runner/package.json').version\""
+    cmd: "node {unode}/usearazzo-run.mjs {f} {workflow} '{inputs}'"
+    notes: "A library with no CLI; scripts/usearazzo-run.mjs calls ArazzoRunner.load and execute."
