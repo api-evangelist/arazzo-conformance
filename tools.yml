@@ -45,8 +45,3 @@ tools:
     version_cmd: "{py}/pip show arazzo-runner | grep Version"
     cmd: "{py}/arazzo-runner list-workflows {f}"
     error: 'Traceback'
-  - id: specmatic
-    name: Specmatic (Arazzo test/mock)
-    repo: https://github.com/specmatic/specmatic
-    role: executes
-    skip: "Not run. The open-source specmatic jar (MIT, 2.56.1) holds only Arazzo config classes: no parser, validator or runner. Arazzo test and mock ship in the specmatic/specmatic-arazzo Docker image, which Specmatic lists as an Enterprise feature (docs.specmatic.io/references/open-source-vs-enterprise). It belongs in the execution tier, with a license."
