@@ -45,6 +45,9 @@ def main():
     cases = load_cases()
     rows, meta = [], {}
     for t in tools:
+        if t.get('skip'):
+            meta[t['id']] = {k: t.get(k, '') for k in ('name', 'repo', 'role')} | {'version': '', 'notes': t['skip'], 'skipped': True}
+            continue
         _, v = run(t['version_cmd'].format(**env))
         meta[t['id']] = {k: t.get(k, '') for k in ('name', 'repo', 'role', 'notes')} | {'version': v.strip().splitlines()[-1] if v.strip() else ''}
         for c in cases:

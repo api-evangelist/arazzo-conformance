@@ -57,13 +57,14 @@ td.c{text-align:center;white-space:nowrap;cursor:help}
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 fetch('data/latest.json').then(r => r.json()).then(d => {
-  const tools = Object.keys(d.tools), versions = [...new Set(d.cases.map(c => c.version))].sort();
+  const all = Object.keys(d.tools), tools = all.filter(t => !d.tools[t].skipped), versions = [...new Set(d.cases.map(c => c.version))].sort();
   const R = {}; d.results.forEach(r => R[r.tool + '|' + r.case] = r);
   $('sub').textContent = `${d.cases.length} cases × ${tools.length} tools · run ${d.date}`;
   versions.forEach(v => $('fv').insertAdjacentHTML('beforeend', `<option>${v}</option>`));
 
-  $('cards').innerHTML = tools.map(t => {
+  $('cards').innerHTML = all.map(t => {
     const m = d.tools[t];
+    if (m.skipped) return `<div class="card"><h3><a href="${esc(m.repo)}">${esc(m.name)}</a><span class="tag">not run</span></h3><div class="note">${esc(m.notes)}</div></div>`;
     const rows = versions.map(v => {
       const rs = d.results.filter(r => r.tool === t && r.version === v);
       const unsup = rs.filter(r => r.verdict === 'unsupported').length;
