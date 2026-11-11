@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Arazzo Conformance</title>
-<meta name="description" content="How the open-source Arazzo tooling judges valid and invalid Arazzo 1.0.1 and 1.1.0 documents, measured by API Evangelist.">
+<meta name="description" content="How the open-source Arazzo tooling validates Arazzo 1.0.1 and 1.1.0 documents and executes workflows, measured by API Evangelist.">
 <style>
 :root{--bg:#fbfbf9;--fg:#1b1d22;--muted:#61656f;--line:#e2e2dc;--card:#fff;--ok:#1f7a4d;--okbg:#e3f3ea;--miss:#b3261e;--missbg:#fbe5e3;--na:#6b6f78;--nabg:#ececea;--accent:#2457c5}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14161a;--fg:#e7e8ea;--muted:#9a9ea8;--line:#2b2e35;--card:#1b1e23;--ok:#6fd39f;--okbg:#173326;--miss:#ff8a80;--missbg:#3a1d1b;--na:#a0a4ad;--nabg:#262930;--accent:#8fb0ff}}
@@ -52,6 +52,11 @@ td.c{text-align:center;white-space:nowrap;cursor:help}
 </div>
 <div class="scroll"><table id="grid"></table></div>
 <p class="note">✓ right verdict · ✗ wrong verdict · — tool declined the document's Arazzo version · ! tool crashed. Hover a cell for the tool's output.</p>
+<h2>Execution</h2>
+<p>Validation asks whether a tool reads a document correctly; execution asks whether a runner does what the workflow says. Each case runs one workflow against a mock petstore that records every request. A case passes when the run ends the way the spec says it should <b>and</b> the mock saw exactly the expected requests, in order, carrying the expected values. Contested cases are run and shown but not scored.</p>
+<div class="cards" id="xcards"></div>
+<div class="scroll" style="margin-top:12px"><table id="xgrid"></table></div>
+<p class="note">✓ right outcome and requests · ✗ wrong · ○ contested, shown but not scored. Hover a cell for what the runner did.</p>
 </main>
 <script>
 const $ = id => document.getElementById(id);
@@ -91,6 +96,23 @@ fetch('data/latest.json').then(r => r.json()).then(d => {
           return `<td class="c ${cls}" title="${esc(r.verdict + ' (exit ' + r.exit + ')\n' + r.tail.slice(-400))}">${sym}</td>`; }).join('') + '</tr>').join('');
   };
   ['fv', 'fl', 'fe'].forEach(id => $(id).onchange = draw); $('fq').oninput = draw; draw();
+});
+</script>
+<script>
+fetch('data/exec-latest.json').then(r => r.json()).then(d => {
+  const tools = Object.keys(d.tools), R = {};
+  d.results.forEach(r => R[r.tool + '|' + r.case] = r);
+  const scored = d.cases.filter(c => c.expect !== 'contested');
+  document.getElementById('xcards').innerHTML = tools.map(t => {
+    const m = d.tools[t], rs = d.results.filter(r => r.tool === t && scored.some(c => c.id === r.case));
+    return `<div class="card"><h3><a href="${esc(m.repo)}">${esc(m.name)}</a></h3><div class="v">${esc(m.version)}</div>
+      <div class="row"><span>Arazzo 1.0.1 workflows</span><b>${rs.filter(r => r.pass).length}/${rs.length}</b></div></div>`;
+  }).join('');
+  document.getElementById('xgrid').innerHTML = `<tr><th class="case">Case</th><th>Expect</th>${tools.map(t => `<th>${esc(d.tools[t].name)}</th>`).join('')}</tr>` +
+    d.cases.map(c => `<tr><td class="case"><a href="https://github.com/api-evangelist/arazzo-conformance/blob/main/${esc(c.file)}"><code>${esc(c.id.replace(/^exec-/, ''))}</code></a><small>${esc(c.rule)} · <a href="${esc(c.spec)}">spec</a></small><small>${esc(c.requests.join(' → '))}</small>${c.note ? `<small>${esc(c.note)}</small>` : ''}</td><td>${c.expect}</td>` +
+      tools.map(t => { const r = R[t + '|' + c.id]; if (!r) return '<td></td>';
+        const [cls, sym] = c.expect === 'contested' ? ['na', '○ ' + r.outcome] : r.pass ? ['ok', '✓'] : ['miss', '✗'];
+        return `<td class="c ${cls}" title="${esc(r.outcome + (r.why ? '\n' + r.why : '') + '\nrequests: ' + r.requests.join(' → '))}">${sym}</td>`; }).join('') + '</tr>').join('');
 });
 </script>
 </body>

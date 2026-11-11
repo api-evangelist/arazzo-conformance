@@ -1,0 +1,224 @@
+suite: exec
+cases:
+- id: exec-chain-output-to-path
+  file: chain-output-to-path.arazzo.yaml
+  version: 1.0.1
+  workflow: run
+  inputs:
+    name: Rex
+  expect: success
+  requests:
+  - POST /pets
+  - GET /pets/pet-1
+  match:
+    0:
+      body:
+        name: Rex
+  rule: a step output feeds the next step's path parameter
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#runtime-expressions
+- id: exec-payload-replacement
+  file: payload-replacement.arazzo.yaml
+  version: 1.0.1
+  workflow: run
+  inputs:
+    name: Rex
+  expect: success
+  requests:
+  - POST /pets
+  match:
+    0:
+      body:
+        name: Rex
+        status: sold
+  rule: replacements overwrite the payload at a JSON Pointer before sending
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#payload-replacement-object
+- id: exec-query-parameter
+  file: query-parameter.arazzo.yaml
+  version: 1.0.1
+  workflow: run
+  inputs: {}
+  expect: success
+  requests:
+  - GET /pets
+  match:
+    0:
+      query:
+        limit: '2'
+  rule: a query parameter is sent on the request
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#parameter-object
+- id: exec-header-parameter
+  file: header-parameter.arazzo.yaml
+  version: 1.0.1
+  workflow: run
+  inputs: {}
+  expect: success
+  requests:
+  - GET /pets
+  match:
+    0:
+      headers:
+        x-trace: conformance
+  rule: a header parameter is sent on the request
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#parameter-object
+- id: exec-success-criteria-fail
+  file: success-criteria-fail.arazzo.yaml
+  version: 1.0.1
+  workflow: run
+  inputs:
+    name: Rex
+  expect: failure
+  requests:
+  - POST /pets
+  match: {}
+  rule: an unmet successCriteria fails the step and the workflow, and nothing after it runs
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#step-object
+- id: exec-body-condition-pass
+  file: body-condition-pass.arazzo.yaml
+  version: 1.0.1
+  workflow: run
+  inputs:
+    name: Rex
+  expect: success
+  requests:
+  - POST /pets
+  - GET /pets/pet-1
+  match: {}
+  rule: a simple condition can compare a response body value
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#criterion-object
+- id: exec-body-condition-fail
+  file: body-condition-fail.arazzo.yaml
+  version: 1.0.1
+  workflow: run
+  inputs:
+    name: Rex
+  expect: failure
+  requests:
+  - POST /pets
+  - GET /pets/pet-1
+  match: {}
+  rule: a false body comparison fails the workflow
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#criterion-object
+- id: exec-regex-criterion-fail
+  file: regex-criterion-fail.arazzo.yaml
+  version: 1.0.1
+  workflow: run
+  inputs:
+    name: Rex
+  expect: failure
+  requests:
+  - POST /pets
+  match: {}
+  rule: a regex criterion that does not match fails the workflow
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#criterion-object
+- id: exec-jsonpath-filter-over-object
+  file: jsonpath-filter-over-object.arazzo.yaml
+  version: 1.0.1
+  workflow: run
+  inputs:
+    name: Rex
+  expect: contested
+  requests:
+  - POST /pets
+  match: {}
+  rule: a jsonpath filter over an object body, read the way the spec example reads
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#criterion-object
+  note: Not scored. The spec example $[?count(@.pets) > 0] applies a filter to the root object itself; RFC 9535 applies a filter to the children of the root. A runner
+    that follows one reading passes one of these two cases and fails the other.
+- id: exec-jsonpath-filter-over-array
+  file: jsonpath-filter-over-array.arazzo.yaml
+  version: 1.0.1
+  workflow: run
+  inputs:
+    name: Rex
+  expect: contested
+  requests:
+  - POST /pets
+  - GET /pets
+  match: {}
+  rule: a jsonpath filter over an array body, read the way RFC 9535 reads
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#criterion-object
+  note: Not scored. The spec example $[?count(@.pets) > 0] applies a filter to the root object itself; RFC 9535 applies a filter to the children of the root. A runner
+    that follows one reading passes one of these two cases and fails the other.
+- id: exec-on-success-end
+  file: on-success-end.arazzo.yaml
+  version: 1.0.1
+  workflow: run
+  inputs:
+    name: Rex
+  expect: success
+  requests:
+  - POST /pets
+  match: {}
+  rule: onSuccess end stops the workflow after the step
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#success-action-object
+- id: exec-on-success-goto-skip
+  file: on-success-goto-skip.arazzo.yaml
+  version: 1.0.1
+  workflow: run
+  inputs:
+    name: Rex
+  expect: success
+  requests:
+  - POST /pets
+  - GET /pets/pet-1
+  match: {}
+  rule: onSuccess goto jumps over the steps between
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#success-action-object
+- id: exec-on-failure-retry
+  file: on-failure-retry.arazzo.yaml
+  version: 1.0.1
+  workflow: run
+  inputs:
+    name: flaky
+  expect: success
+  requests:
+  - POST /pets
+  - GET /pets/pet-1
+  - GET /pets/pet-1
+  match: {}
+  rule: onFailure retry repeats the step until it succeeds
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#failure-action-object
+  note: The mock answers a pet named flaky with 404 once, then 200.
+- id: exec-retry-limit-exhausted
+  file: retry-limit-exhausted.arazzo.yaml
+  version: 1.0.1
+  workflow: run
+  inputs: {}
+  expect: failure
+  requests:
+  - GET /pets/missing
+  - GET /pets/missing
+  - GET /pets/missing
+  match: {}
+  rule: retryLimit 2 means two retries after the first attempt, then the step fails
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#failure-action-object
+  note: 'The spec: retryLimit is "how many attempts to retry the step may be attempted before failing", so 1 + 2 requests.'
+- id: exec-on-failure-goto-recover
+  file: on-failure-goto-recover.arazzo.yaml
+  version: 1.0.1
+  workflow: run
+  inputs: {}
+  expect: any
+  requests:
+  - GET /pets/missing
+  - GET /pets
+  match: {}
+  rule: onFailure goto runs the recovery step
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#failure-action-object
+  note: Whether a workflow that recovered counts as a success is not stated, so only the requests are judged.
+- id: exec-workflow-step
+  file: workflow-step.arazzo.yaml
+  version: 1.0.1
+  workflow: run
+  inputs: {}
+  expect: success
+  requests:
+  - POST /pets
+  - GET /pets/pet-1
+  - GET /pets/pet-1
+  match:
+    0:
+      body:
+        name: Rex
+  rule: a step can run another workflow and use its outputs
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#step-object

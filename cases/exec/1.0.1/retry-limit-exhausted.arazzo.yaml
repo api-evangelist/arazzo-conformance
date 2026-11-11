@@ -1,0 +1,26 @@
+arazzo: 1.0.1
+info:
+  title: 'retry-limit-exhausted: retryLimit 2 means two retries after the first attempt, then the step fails'
+  version: 1.0.0
+sourceDescriptions:
+- name: petstore
+  url: ../../ae/sources/petstore.openapi.yaml
+  type: openapi
+workflows:
+- workflowId: run
+  steps:
+  - stepId: fetch
+    operationId: getPet
+    parameters:
+    - name: petId
+      in: path
+      value: missing
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      status: $response.body#/status
+    onFailure:
+    - name: again
+      type: retry
+      retryAfter: 0
+      retryLimit: 2

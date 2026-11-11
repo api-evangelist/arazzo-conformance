@@ -1,0 +1,32 @@
+arazzo: 1.0.1
+info:
+  title: 'payload-replacement: replacements overwrite the payload at a JSON Pointer before sending'
+  version: 1.0.0
+sourceDescriptions:
+- name: petstore
+  url: ../../ae/sources/petstore.openapi.yaml
+  type: openapi
+workflows:
+- workflowId: run
+  inputs:
+    type: object
+    properties:
+      name:
+        type: string
+    required:
+    - name
+  steps:
+  - stepId: create
+    operationId: createPet
+    requestBody:
+      contentType: application/json
+      payload:
+        name: $inputs.name
+        status: available
+      replacements:
+      - target: /status
+        value: sold
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      petId: $response.body#/id

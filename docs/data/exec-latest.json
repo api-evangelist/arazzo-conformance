@@ -1,0 +1,720 @@
+{
+ "date": "2026-11-11",
+ "tools": {
+  "redocly-respect": {
+   "name": "Redocly Respect",
+   "repo": "https://github.com/Redocly/redocly-cli",
+   "notes": "",
+   "version": "2.77.0"
+  },
+  "arazzo-runner": {
+   "name": "Arazzo Runner",
+   "repo": "https://github.com/jentic/arazzo-engine",
+   "notes": "",
+   "version": "Version: 0.9.6"
+  }
+ },
+ "cases": [
+  {
+   "id": "exec-chain-output-to-path",
+   "version": "1.0.1",
+   "workflow": "run",
+   "inputs": {
+    "name": "Rex"
+   },
+   "expect": "success",
+   "requests": [
+    "POST /pets",
+    "GET /pets/pet-1"
+   ],
+   "match": {
+    "0": {
+     "body": {
+      "name": "Rex"
+     }
+    }
+   },
+   "rule": "a step output feeds the next step's path parameter",
+   "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#runtime-expressions",
+   "file": "cases/exec/1.0.1/chain-output-to-path.arazzo.yaml"
+  },
+  {
+   "id": "exec-payload-replacement",
+   "version": "1.0.1",
+   "workflow": "run",
+   "inputs": {
+    "name": "Rex"
+   },
+   "expect": "success",
+   "requests": [
+    "POST /pets"
+   ],
+   "match": {
+    "0": {
+     "body": {
+      "name": "Rex",
+      "status": "sold"
+     }
+    }
+   },
+   "rule": "replacements overwrite the payload at a JSON Pointer before sending",
+   "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#payload-replacement-object",
+   "file": "cases/exec/1.0.1/payload-replacement.arazzo.yaml"
+  },
+  {
+   "id": "exec-query-parameter",
+   "version": "1.0.1",
+   "workflow": "run",
+   "inputs": {},
+   "expect": "success",
+   "requests": [
+    "GET /pets"
+   ],
+   "match": {
+    "0": {
+     "query": {
+      "limit": "2"
+     }
+    }
+   },
+   "rule": "a query parameter is sent on the request",
+   "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#parameter-object",
+   "file": "cases/exec/1.0.1/query-parameter.arazzo.yaml"
+  },
+  {
+   "id": "exec-header-parameter",
+   "version": "1.0.1",
+   "workflow": "run",
+   "inputs": {},
+   "expect": "success",
+   "requests": [
+    "GET /pets"
+   ],
+   "match": {
+    "0": {
+     "headers": {
+      "x-trace": "conformance"
+     }
+    }
+   },
+   "rule": "a header parameter is sent on the request",
+   "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#parameter-object",
+   "file": "cases/exec/1.0.1/header-parameter.arazzo.yaml"
+  },
+  {
+   "id": "exec-success-criteria-fail",
+   "version": "1.0.1",
+   "workflow": "run",
+   "inputs": {
+    "name": "Rex"
+   },
+   "expect": "failure",
+   "requests": [
+    "POST /pets"
+   ],
+   "match": {},
+   "rule": "an unmet successCriteria fails the step and the workflow, and nothing after it runs",
+   "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#step-object",
+   "file": "cases/exec/1.0.1/success-criteria-fail.arazzo.yaml"
+  },
+  {
+   "id": "exec-body-condition-pass",
+   "version": "1.0.1",
+   "workflow": "run",
+   "inputs": {
+    "name": "Rex"
+   },
+   "expect": "success",
+   "requests": [
+    "POST /pets",
+    "GET /pets/pet-1"
+   ],
+   "match": {},
+   "rule": "a simple condition can compare a response body value",
+   "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#criterion-object",
+   "file": "cases/exec/1.0.1/body-condition-pass.arazzo.yaml"
+  },
+  {
+   "id": "exec-body-condition-fail",
+   "version": "1.0.1",
+   "workflow": "run",
+   "inputs": {
+    "name": "Rex"
+   },
+   "expect": "failure",
+   "requests": [
+    "POST /pets",
+    "GET /pets/pet-1"
+   ],
+   "match": {},
+   "rule": "a false body comparison fails the workflow",
+   "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#criterion-object",
+   "file": "cases/exec/1.0.1/body-condition-fail.arazzo.yaml"
+  },
+  {
+   "id": "exec-regex-criterion-fail",
+   "version": "1.0.1",
+   "workflow": "run",
+   "inputs": {
+    "name": "Rex"
+   },
+   "expect": "failure",
+   "requests": [
+    "POST /pets"
+   ],
+   "match": {},
+   "rule": "a regex criterion that does not match fails the workflow",
+   "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#criterion-object",
+   "file": "cases/exec/1.0.1/regex-criterion-fail.arazzo.yaml"
+  },
+  {
+   "id": "exec-jsonpath-filter-over-object",
+   "version": "1.0.1",
+   "workflow": "run",
+   "inputs": {
+    "name": "Rex"
+   },
+   "expect": "contested",
+   "requests": [
+    "POST /pets"
+   ],
+   "match": {},
+   "rule": "a jsonpath filter over an object body, read the way the spec example reads",
+   "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#criterion-object",
+   "file": "cases/exec/1.0.1/jsonpath-filter-over-object.arazzo.yaml",
+   "note": "Not scored. The spec example $[?count(@.pets) > 0] applies a filter to the root object itself; RFC 9535 applies a filter to the children of the root. A runner that follows one reading passes one of these two cases and fails the other."
+  },
+  {
+   "id": "exec-jsonpath-filter-over-array",
+   "version": "1.0.1",
+   "workflow": "run",
+   "inputs": {
+    "name": "Rex"
+   },
+   "expect": "contested",
+   "requests": [
+    "POST /pets",
+    "GET /pets"
+   ],
+   "match": {},
+   "rule": "a jsonpath filter over an array body, read the way RFC 9535 reads",
+   "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#criterion-object",
+   "file": "cases/exec/1.0.1/jsonpath-filter-over-array.arazzo.yaml",
+   "note": "Not scored. The spec example $[?count(@.pets) > 0] applies a filter to the root object itself; RFC 9535 applies a filter to the children of the root. A runner that follows one reading passes one of these two cases and fails the other."
+  },
+  {
+   "id": "exec-on-success-end",
+   "version": "1.0.1",
+   "workflow": "run",
+   "inputs": {
+    "name": "Rex"
+   },
+   "expect": "success",
+   "requests": [
+    "POST /pets"
+   ],
+   "match": {},
+   "rule": "onSuccess end stops the workflow after the step",
+   "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#success-action-object",
+   "file": "cases/exec/1.0.1/on-success-end.arazzo.yaml"
+  },
+  {
+   "id": "exec-on-success-goto-skip",
+   "version": "1.0.1",
+   "workflow": "run",
+   "inputs": {
+    "name": "Rex"
+   },
+   "expect": "success",
+   "requests": [
+    "POST /pets",
+    "GET /pets/pet-1"
+   ],
+   "match": {},
+   "rule": "onSuccess goto jumps over the steps between",
+   "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#success-action-object",
+   "file": "cases/exec/1.0.1/on-success-goto-skip.arazzo.yaml"
+  },
+  {
+   "id": "exec-on-failure-retry",
+   "version": "1.0.1",
+   "workflow": "run",
+   "inputs": {
+    "name": "flaky"
+   },
+   "expect": "success",
+   "requests": [
+    "POST /pets",
+    "GET /pets/pet-1",
+    "GET /pets/pet-1"
+   ],
+   "match": {},
+   "rule": "onFailure retry repeats the step until it succeeds",
+   "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#failure-action-object",
+   "file": "cases/exec/1.0.1/on-failure-retry.arazzo.yaml",
+   "note": "The mock answers a pet named flaky with 404 once, then 200."
+  },
+  {
+   "id": "exec-retry-limit-exhausted",
+   "version": "1.0.1",
+   "workflow": "run",
+   "inputs": {},
+   "expect": "failure",
+   "requests": [
+    "GET /pets/missing",
+    "GET /pets/missing",
+    "GET /pets/missing"
+   ],
+   "match": {},
+   "rule": "retryLimit 2 means two retries after the first attempt, then the step fails",
+   "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#failure-action-object",
+   "file": "cases/exec/1.0.1/retry-limit-exhausted.arazzo.yaml",
+   "note": "The spec: retryLimit is \"how many attempts to retry the step may be attempted before failing\", so 1 + 2 requests."
+  },
+  {
+   "id": "exec-on-failure-goto-recover",
+   "version": "1.0.1",
+   "workflow": "run",
+   "inputs": {},
+   "expect": "any",
+   "requests": [
+    "GET /pets/missing",
+    "GET /pets"
+   ],
+   "match": {},
+   "rule": "onFailure goto runs the recovery step",
+   "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#failure-action-object",
+   "file": "cases/exec/1.0.1/on-failure-goto-recover.arazzo.yaml",
+   "note": "Whether a workflow that recovered counts as a success is not stated, so only the requests are judged."
+  },
+  {
+   "id": "exec-workflow-step",
+   "version": "1.0.1",
+   "workflow": "run",
+   "inputs": {},
+   "expect": "success",
+   "requests": [
+    "POST /pets",
+    "GET /pets/pet-1",
+    "GET /pets/pet-1"
+   ],
+   "match": {
+    "0": {
+     "body": {
+      "name": "Rex"
+     }
+    }
+   },
+   "rule": "a step can run another workflow and use its outputs",
+   "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#step-object",
+   "file": "cases/exec/1.0.1/workflow-step.arazzo.yaml"
+  }
+ ],
+ "results": [
+  {
+   "tool": "redocly-respect",
+   "case": "exec-chain-output-to-path",
+   "outcome": "success",
+   "requests": [
+    "POST /pets",
+    "GET /pets/pet-1"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 0,
+   "tail": "\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 Filename                                                                 \u2502 Workflows  \u2502 Passed  \u2502 Failed  \u2502 Warnings \u2502\n\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524\n\u2502 \u2713 chain-output-to-path.arazzo.yaml                                       \u2502 1          \u2502 1       \u2502 -       \u2502 -        \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518"
+  },
+  {
+   "tool": "redocly-respect",
+   "case": "exec-payload-replacement",
+   "outcome": "success",
+   "requests": [
+    "POST /pets"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 0,
+   "tail": "\n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 Filename                                                                \u2502 Workflows  \u2502 Passed  \u2502 Failed  \u2502 Warnings \u2502\n\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524\n\u2502 \u2713 payload-replacement.arazzo.yaml                                       \u2502 1          \u2502 1       \u2502 -       \u2502 -        \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518"
+  },
+  {
+   "tool": "redocly-respect",
+   "case": "exec-query-parameter",
+   "outcome": "success",
+   "requests": [
+    "GET /pets"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 0,
+   "tail": "al\n\u00a0\u00a0Time: 25ms \n \n \n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 Filename                                                            \u2502 Workflows  \u2502 Passed  \u2502 Failed  \u2502 Warnings \u2502\n\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524\n\u2502 \u2713 query-parameter.arazzo.yaml                                       \u2502 1          \u2502 1       \u2502 -       \u2502 -        \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518"
+  },
+  {
+   "tool": "redocly-respect",
+   "case": "exec-header-parameter",
+   "outcome": "success",
+   "requests": [
+    "GET /pets"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 0,
+   "tail": "Time: 25ms \n \n \n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 Filename                                                             \u2502 Workflows  \u2502 Passed  \u2502 Failed  \u2502 Warnings \u2502\n\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524\n\u2502 \u2713 header-parameter.arazzo.yaml                                       \u2502 1          \u2502 1       \u2502 -       \u2502 -        \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518"
+  },
+  {
+   "tool": "redocly-respect",
+   "case": "exec-success-criteria-fail",
+   "outcome": "failure",
+   "requests": [
+    "POST /pets"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 1,
+   "tail": "\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 Filename                                                                  \u2502 Workflows  \u2502 Passed  \u2502 Failed  \u2502 Warnings \u2502\n\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524\n\u2502 x success-criteria-fail.arazzo.yaml                                       \u2502 1          \u2502 0       \u2502 1       \u2502 -        \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n \n Tests exited with error"
+  },
+  {
+   "tool": "redocly-respect",
+   "case": "exec-body-condition-pass",
+   "outcome": "success",
+   "requests": [
+    "POST /pets",
+    "GET /pets/pet-1"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 0,
+   "tail": "\n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 Filename                                                                \u2502 Workflows  \u2502 Passed  \u2502 Failed  \u2502 Warnings \u2502\n\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524\n\u2502 \u2713 body-condition-pass.arazzo.yaml                                       \u2502 1          \u2502 1       \u2502 -       \u2502 -        \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518"
+  },
+  {
+   "tool": "redocly-respect",
+   "case": "exec-body-condition-fail",
+   "outcome": "failure",
+   "requests": [
+    "POST /pets",
+    "GET /pets/pet-1"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 1,
+   "tail": "\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 Filename                                                                \u2502 Workflows  \u2502 Passed  \u2502 Failed  \u2502 Warnings \u2502\n\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524\n\u2502 x body-condition-fail.arazzo.yaml                                       \u2502 1          \u2502 0       \u2502 1       \u2502 -        \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n \n Tests exited with error"
+  },
+  {
+   "tool": "redocly-respect",
+   "case": "exec-regex-criterion-fail",
+   "outcome": "failure",
+   "requests": [
+    "POST /pets"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 1,
+   "tail": "\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 Filename                                                                 \u2502 Workflows  \u2502 Passed  \u2502 Failed  \u2502 Warnings \u2502\n\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524\n\u2502 x regex-criterion-fail.arazzo.yaml                                       \u2502 1          \u2502 0       \u2502 1       \u2502 -        \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n \n Tests exited with error"
+  },
+  {
+   "tool": "redocly-respect",
+   "case": "exec-jsonpath-filter-over-object",
+   "outcome": "success",
+   "requests": [
+    "POST /pets"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 0,
+   "tail": "\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 Filename                                                                        \u2502 Workflows  \u2502 Passed  \u2502 Failed  \u2502 Warnings \u2502\n\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524\n\u2502 \u2713 jsonpath-filter-over-object.arazzo.yaml                                       \u2502 1          \u2502 1       \u2502 -       \u2502 -        \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518"
+  },
+  {
+   "tool": "redocly-respect",
+   "case": "exec-jsonpath-filter-over-array",
+   "outcome": "failure",
+   "requests": [
+    "POST /pets",
+    "GET /pets"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 1,
+   "tail": "\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 Filename                                                                       \u2502 Workflows  \u2502 Passed  \u2502 Failed  \u2502 Warnings \u2502\n\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524\n\u2502 x jsonpath-filter-over-array.arazzo.yaml                                       \u2502 1          \u2502 0       \u2502 1       \u2502 -        \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n \n Tests exited with error"
+  },
+  {
+   "tool": "redocly-respect",
+   "case": "exec-on-success-end",
+   "outcome": "success",
+   "requests": [
+    "POST /pets"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 0,
+   "tail": "4 total\n\u00a0\u00a0Time: 55ms \n \n \n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 Filename                                                           \u2502 Workflows  \u2502 Passed  \u2502 Failed  \u2502 Warnings \u2502\n\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524\n\u2502 \u2713 on-success-end.arazzo.yaml                                       \u2502 1          \u2502 1       \u2502 -       \u2502 -        \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518"
+  },
+  {
+   "tool": "redocly-respect",
+   "case": "exec-on-success-goto-skip",
+   "outcome": "success",
+   "requests": [
+    "POST /pets",
+    "GET /pets/pet-1"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 0,
+   "tail": "\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 Filename                                                                 \u2502 Workflows  \u2502 Passed  \u2502 Failed  \u2502 Warnings \u2502\n\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524\n\u2502 \u2713 on-success-goto-skip.arazzo.yaml                                       \u2502 1          \u2502 1       \u2502 -       \u2502 -        \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518"
+  },
+  {
+   "tool": "redocly-respect",
+   "case": "exec-on-failure-retry",
+   "outcome": "success",
+   "requests": [
+    "POST /pets",
+    "GET /pets/pet-1",
+    "GET /pets/pet-1"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 0,
+   "tail": "Time: 63ms \n \n \n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 Filename                                                             \u2502 Workflows  \u2502 Passed  \u2502 Failed  \u2502 Warnings \u2502\n\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524\n\u2502 \u2713 on-failure-retry.arazzo.yaml                                       \u2502 1          \u2502 1       \u2502 -       \u2502 -        \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518"
+  },
+  {
+   "tool": "redocly-respect",
+   "case": "exec-retry-limit-exhausted",
+   "outcome": "failure",
+   "requests": [
+    "GET /pets/missing",
+    "GET /pets/missing",
+    "GET /pets/missing"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 1,
+   "tail": "\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 Filename                                                                  \u2502 Workflows  \u2502 Passed  \u2502 Failed  \u2502 Warnings \u2502\n\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524\n\u2502 x retry-limit-exhausted.arazzo.yaml                                       \u2502 1          \u2502 0       \u2502 1       \u2502 -        \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n \n Tests exited with error"
+  },
+  {
+   "tool": "redocly-respect",
+   "case": "exec-on-failure-goto-recover",
+   "outcome": "failure",
+   "requests": [
+    "GET /pets/missing",
+    "GET /pets"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 1,
+   "tail": "\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 Filename                                                                    \u2502 Workflows  \u2502 Passed  \u2502 Failed  \u2502 Warnings \u2502\n\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524\n\u2502 x on-failure-goto-recover.arazzo.yaml                                       \u2502 1          \u2502 0       \u2502 1       \u2502 -        \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n \n Tests exited with error"
+  },
+  {
+   "tool": "redocly-respect",
+   "case": "exec-workflow-step",
+   "outcome": "success",
+   "requests": [
+    "POST /pets",
+    "GET /pets/pet-1",
+    "GET /pets/pet-1"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 0,
+   "tail": "ed, 12 total\n\u00a0\u00a0Time: 62ms \n \n \n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 Filename                                                          \u2502 Workflows  \u2502 Passed  \u2502 Failed  \u2502 Warnings \u2502\n\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524\n\u2502 \u2713 workflow-step.arazzo.yaml                                       \u2502 1          \u2502 1       \u2502 -       \u2502 -        \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518"
+  },
+  {
+   "tool": "arazzo-runner",
+   "case": "exec-chain-output-to-path",
+   "outcome": "success",
+   "requests": [
+    "POST /pets",
+    "GET /pets/pet-1"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 0,
+   "tail": "40:46,428 - arazzo-runner - INFO - ===== EXECUTING STEP: fetch =====\n2026-11-11 16:40:46,429 - arazzo-runner.executor - INFO - Response status code: 200\n2026-11-11 16:40:46,429 - arazzo-runner.executor - INFO - Step fetch has 0 onSuccess actions\n2026-11-11 16:40:46,429 - arazzo-runner.executor - INFO - No matching action for step fetch, continuing to next step\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=workflow_complete, workflow_id='run', outputs={}, step_outputs={'create': {'petId': 'pet-1'}, 'fetch': {'status': 'available'}}, inputs={'name': 'Rex'}, error=None)"
+  },
+  {
+   "tool": "arazzo-runner",
+   "case": "exec-payload-replacement",
+   "outcome": "success",
+   "requests": [
+    "POST /pets"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 0,
+   "tail": "ment.arazzo.yaml\n2026-11-11 16:40:46,598 - arazzo-runner - INFO - ===== EXECUTING STEP: create =====\n2026-11-11 16:40:46,602 - arazzo-runner.executor - INFO - Response status code: 201\n2026-11-11 16:40:46,602 - arazzo-runner.executor - INFO - Step create has 0 onSuccess actions\n2026-11-11 16:40:46,602 - arazzo-runner.executor - INFO - No matching action for step create, continuing to next step\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=workflow_complete, workflow_id='run', outputs={}, step_outputs={'create': {'petId': 'pet-1'}}, inputs={'name': 'Rex'}, error=None)"
+  },
+  {
+   "tool": "arazzo-runner",
+   "case": "exec-query-parameter",
+   "outcome": "success",
+   "requests": [
+    "GET /pets"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 0,
+   "tail": "TING STEP: list =====\n2026-11-11 16:40:46,773 - arazzo-runner.executor - INFO - Response status code: 200\n2026-11-11 16:40:46,773 - arazzo-runner.executor - WARNING - No outputs were successfully extracted for step list\n2026-11-11 16:40:46,773 - arazzo-runner.executor - INFO - Step list has 0 onSuccess actions\n2026-11-11 16:40:46,773 - arazzo-runner.executor - INFO - No matching action for step list, continuing to next step\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=workflow_complete, workflow_id='run', outputs={}, step_outputs={'list': {}}, inputs={}, error=None)"
+  },
+  {
+   "tool": "arazzo-runner",
+   "case": "exec-header-parameter",
+   "outcome": "success",
+   "requests": [
+    "GET /pets"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 0,
+   "tail": "TING STEP: list =====\n2026-11-11 16:40:46,945 - arazzo-runner.executor - INFO - Response status code: 200\n2026-11-11 16:40:46,945 - arazzo-runner.executor - WARNING - No outputs were successfully extracted for step list\n2026-11-11 16:40:46,945 - arazzo-runner.executor - INFO - Step list has 0 onSuccess actions\n2026-11-11 16:40:46,945 - arazzo-runner.executor - INFO - No matching action for step list, continuing to next step\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=workflow_complete, workflow_id='run', outputs={}, step_outputs={'list': {}}, inputs={}, error=None)"
+  },
+  {
+   "tool": "arazzo-runner",
+   "case": "exec-success-criteria-fail",
+   "outcome": "failure",
+   "requests": [
+    "POST /pets"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 0,
+   "tail": "ng runner with Arazzo file: ./cases/exec/1.0.1/success-criteria-fail.arazzo.yaml\n2026-11-11 16:40:47,122 - arazzo-runner - INFO - ===== EXECUTING STEP: create =====\n2026-11-11 16:40:47,126 - arazzo-runner.executor - INFO - Response status code: 201\n2026-11-11 16:40:47,126 - arazzo-runner.executor - WARNING - No matching failure action for step create, ending workflow with failure\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=error, workflow_id='run', outputs={}, step_outputs={'create': {'petId': 'pet-1'}}, inputs={'name': 'Rex'}, error='Step failed success criteria')"
+  },
+  {
+   "tool": "arazzo-runner",
+   "case": "exec-body-condition-pass",
+   "outcome": "success",
+   "requests": [
+    "POST /pets",
+    "GET /pets/pet-1"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 0,
+   "tail": "40:47,306 - arazzo-runner - INFO - ===== EXECUTING STEP: fetch =====\n2026-11-11 16:40:47,307 - arazzo-runner.executor - INFO - Response status code: 200\n2026-11-11 16:40:47,307 - arazzo-runner.executor - INFO - Step fetch has 0 onSuccess actions\n2026-11-11 16:40:47,307 - arazzo-runner.executor - INFO - No matching action for step fetch, continuing to next step\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=workflow_complete, workflow_id='run', outputs={}, step_outputs={'create': {'petId': 'pet-1'}, 'fetch': {'status': 'available'}}, inputs={'name': 'Rex'}, error=None)"
+  },
+  {
+   "tool": "arazzo-runner",
+   "case": "exec-body-condition-fail",
+   "outcome": "failure",
+   "requests": [
+    "POST /pets",
+    "GET /pets/pet-1"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 1,
+   "tail": " action for step create, continuing to next step\n2026-11-11 16:40:47,480 - arazzo-runner - INFO - ===== EXECUTING STEP: fetch =====\n2026-11-11 16:40:47,481 - arazzo-runner.executor - INFO - Response status code: 200\n2026-11-11 16:40:47,481 - arazzo-runner.executor - WARNING - No matching failure action for step fetch, ending workflow with failure\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=error, workflow_id='run', outputs={}, step_outputs={'create': {'petId': 'pet-1'}, 'fetch': {'status': 'available'}}, inputs={'name': 'Rex'}, error='Step failed success criteria')"
+  },
+  {
+   "tool": "arazzo-runner",
+   "case": "exec-regex-criterion-fail",
+   "outcome": "failure",
+   "requests": [
+    "POST /pets"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 1,
+   "tail": "ing runner with Arazzo file: ./cases/exec/1.0.1/regex-criterion-fail.arazzo.yaml\n2026-11-11 16:40:47,648 - arazzo-runner - INFO - ===== EXECUTING STEP: create =====\n2026-11-11 16:40:47,652 - arazzo-runner.executor - INFO - Response status code: 201\n2026-11-11 16:40:47,652 - arazzo-runner.executor - WARNING - No matching failure action for step create, ending workflow with failure\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=error, workflow_id='run', outputs={}, step_outputs={'create': {'petId': 'pet-1'}}, inputs={'name': 'Rex'}, error='Step failed success criteria')"
+  },
+  {
+   "tool": "arazzo-runner",
+   "case": "exec-jsonpath-filter-over-object",
+   "outcome": "failure",
+   "requests": [
+    "POST /pets"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 1,
+   "tail": "er.executor - INFO - JSONPath matches: []\n2026-11-11 16:40:47,825 - arazzo-runner.executor - WARNING - JSONPath condition returned no matches: $[?(@.name == 'Rex')]\n2026-11-11 16:40:47,825 - arazzo-runner.executor - INFO - Response status code: 201\n2026-11-11 16:40:47,825 - arazzo-runner.executor - WARNING - No matching failure action for step create, ending workflow with failure\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=error, workflow_id='run', outputs={}, step_outputs={'create': {'petId': 'pet-1'}}, inputs={'name': 'Rex'}, error='Step failed success criteria')"
+  },
+  {
+   "tool": "arazzo-runner",
+   "case": "exec-jsonpath-filter-over-array",
+   "outcome": "success",
+   "requests": [
+    "POST /pets",
+    "GET /pets"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 0,
+   "tail": "13 - arazzo-runner.executor - INFO - Response status code: 200\n2026-11-11 16:40:48,013 - arazzo-runner.executor - WARNING - No outputs were successfully extracted for step list\n2026-11-11 16:40:48,013 - arazzo-runner.executor - INFO - Step list has 0 onSuccess actions\n2026-11-11 16:40:48,013 - arazzo-runner.executor - INFO - No matching action for step list, continuing to next step\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=workflow_complete, workflow_id='run', outputs={}, step_outputs={'create': {'petId': 'pet-1'}, 'list': {}}, inputs={'name': 'Rex'}, error=None)"
+  },
+  {
+   "tool": "arazzo-runner",
+   "case": "exec-on-success-end",
+   "outcome": "success",
+   "requests": [
+    "POST /pets"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 0,
+   "tail": "FO - ===== EXECUTING STEP: create =====\n2026-11-11 16:40:48,188 - arazzo-runner.executor - INFO - Response status code: 201\n2026-11-11 16:40:48,188 - arazzo-runner.executor - INFO - Step create has 1 onSuccess actions\n2026-11-11 16:40:48,188 - arazzo-runner.executor - INFO - Checking action stop of type end\n2026-11-11 16:40:48,188 - arazzo-runner.executor - INFO - Action stop ends the workflow\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=workflow_complete, workflow_id='run', outputs={}, step_outputs={'create': {'petId': 'pet-1'}}, inputs={'name': 'Rex'}, error=None)"
+  },
+  {
+   "tool": "arazzo-runner",
+   "case": "exec-on-success-goto-skip",
+   "outcome": "success",
+   "requests": [
+    "POST /pets",
+    "GET /pets/pet-1"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 0,
+   "tail": "40:48,363 - arazzo-runner - INFO - ===== EXECUTING STEP: fetch =====\n2026-11-11 16:40:48,364 - arazzo-runner.executor - INFO - Response status code: 200\n2026-11-11 16:40:48,364 - arazzo-runner.executor - INFO - Step fetch has 0 onSuccess actions\n2026-11-11 16:40:48,364 - arazzo-runner.executor - INFO - No matching action for step fetch, continuing to next step\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=workflow_complete, workflow_id='run', outputs={}, step_outputs={'create': {'petId': 'pet-1'}, 'fetch': {'status': 'available'}}, inputs={'name': 'Rex'}, error=None)"
+  },
+  {
+   "tool": "arazzo-runner",
+   "case": "exec-on-failure-retry",
+   "outcome": "failure",
+   "requests": [
+    "POST /pets",
+    "GET /pets/pet-1"
+   ],
+   "pass": false,
+   "why": "outcome failure, expected success; requests ['POST /pets', 'GET /pets/pet-1'], expected ['POST /pets', 'GET /pets/pet-1', 'GET /pets/pet-1']",
+   "exit": 1,
+   "tail": "on failed: $statusCode == 404\n2026-11-11 16:40:48,540 - arazzo-runner.executor - INFO - Failure action again criteria not met, skipping\n2026-11-11 16:40:48,540 - arazzo-runner.executor - WARNING - No matching failure action for step fetch, ending workflow with failure\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=error, workflow_id='run', outputs={}, step_outputs={'create': {'petId': 'pet-1'}, 'fetch': {'runner_error_context': {'http_code': 404, 'http_response': {'message': 'not yet'}}, 'status': None}}, inputs={'name': 'flaky'}, error='Step failed success criteria')"
+  },
+  {
+   "tool": "arazzo-runner",
+   "case": "exec-retry-limit-exhausted",
+   "outcome": "success",
+   "requests": [
+    "GET /pets/missing"
+   ],
+   "pass": false,
+   "why": "outcome success, expected failure; requests ['GET /pets/missing'], expected ['GET /pets/missing', 'GET /pets/missing', 'GET /pets/missing']",
+   "exit": 0,
+   "tail": "26-11-11 16:40:48,714 - arazzo-runner.executor - WARNING - Non-2xx status code: 404. Adding error context to outputs.\n2026-11-11 16:40:48,714 - arazzo-runner.executor - INFO - Checking failure action again of type retry\n2026-11-11 16:40:48,714 - arazzo-runner.executor - INFO - Failure action again retries (after=0, limit=2)\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=workflow_complete, workflow_id='run', outputs={}, step_outputs={'fetch': {'runner_error_context': {'http_code': 404, 'http_response': {'message': 'not found'}}, 'status': None}}, inputs={}, error=None)"
+  },
+  {
+   "tool": "arazzo-runner",
+   "case": "exec-on-failure-goto-recover",
+   "outcome": "success",
+   "requests": [
+    "GET /pets/missing",
+    "GET /pets"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 0,
+   "tail": "11 16:40:48,888 - arazzo-runner.executor - WARNING - No outputs were successfully extracted for step list\n2026-11-11 16:40:48,888 - arazzo-runner.executor - INFO - Step list has 0 onSuccess actions\n2026-11-11 16:40:48,888 - arazzo-runner.executor - INFO - No matching action for step list, continuing to next step\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=workflow_complete, workflow_id='run', outputs={}, step_outputs={'fetch': {'runner_error_context': {'http_code': 404, 'http_response': {'message': 'not found'}}, 'status': None}, 'list': {}}, inputs={}, error=None)"
+  },
+  {
+   "tool": "arazzo-runner",
+   "case": "exec-workflow-step",
+   "outcome": "success",
+   "requests": [
+    "POST /pets",
+    "GET /pets/pet-1",
+    "GET /pets/pet-1"
+   ],
+   "pass": true,
+   "why": "",
+   "exit": 0,
+   "tail": "p\n2026-11-11 16:40:49,063 - arazzo-runner - INFO - ===== EXECUTING STEP: again =====\n2026-11-11 16:40:49,064 - arazzo-runner.executor - INFO - Response status code: 200\n2026-11-11 16:40:49,064 - arazzo-runner.executor - INFO - Step again has 0 onSuccess actions\n2026-11-11 16:40:49,064 - arazzo-runner.executor - INFO - No matching action for step again, continuing to next step\n\n=== Completed workflow: run ===\nOutputs: WorkflowExecutionResult(status=workflow_complete, workflow_id='run', outputs={}, step_outputs={'sub': {'petId': 'pet-1'}, 'again': {'status': 'available'}}, inputs={}, error=None)"
+  }
+ ]
+}

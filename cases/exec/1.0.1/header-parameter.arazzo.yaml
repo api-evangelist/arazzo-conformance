@@ -1,0 +1,19 @@
+arazzo: 1.0.1
+info:
+  title: 'header-parameter: a header parameter is sent on the request'
+  version: 1.0.0
+sourceDescriptions:
+- name: petstore
+  url: ../../ae/sources/petstore.openapi.yaml
+  type: openapi
+workflows:
+- workflowId: run
+  steps:
+  - stepId: list
+    operationId: listPets
+    successCriteria:
+    - condition: $statusCode == 200
+    parameters:
+    - name: X-Trace
+      in: header
+      value: conformance

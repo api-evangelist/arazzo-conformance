@@ -50,3 +50,19 @@ tools:
     version_cmd: "{py}/pip show arazzo-runner | grep Version"
     cmd: "{py}/arazzo-runner list-workflows {f}"
     error: 'Traceback'
+
+# The execution tier (scripts/run-exec.py): whole workflows run against scripts/mock-petstore.py on 127.0.0.1:4010.
+# {workflow} = the workflow to run, {inputs} = the inputs as JSON, {inputs_kv} = the inputs as `-i key=value` flags.
+# A run succeeded when `success` matches the output; with no `success` pattern, when the exit code is 0.
+runners:
+  - id: redocly-respect
+    name: Redocly Respect
+    repo: https://github.com/Redocly/redocly-cli
+    version_cmd: "{nb}/redocly --version"
+    cmd: "{nb}/redocly respect {f} -w {workflow} {inputs_kv}"
+  - id: arazzo-runner
+    name: Arazzo Runner
+    repo: https://github.com/jentic/arazzo-engine
+    version_cmd: "{py}/pip show arazzo-runner | grep Version"
+    cmd: "{py}/arazzo-runner execute-workflow {f} --workflow-id {workflow} --inputs '{inputs}'"
+    success: 'WorkflowExecutionResult\(status=workflow_complete'

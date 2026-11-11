@@ -32,6 +32,20 @@ validator is expected to call them invalid. The three 1.0.1 example documents OA
 prose rules too (runtime expression syntax, a non-JSONPath condition, a non-string `value`), so `run.py`
 expects them invalid and says why.
 
+## Execution
+
+`cases/exec/1.0.1/` holds whole workflows a runner executes against `scripts/mock-petstore.py` (port 4010, the
+`servers` URL in the petstore source). The mock logs every request; a case states the outcome (success or failure),
+the exact request sequence, and values the requests must carry, so a runner is judged on what it sent, not on what it
+reports. Covered: output chaining, inputs, payload replacements, query and header parameters, success criteria
+(simple, regex, body comparison), onSuccess end and goto, onFailure retry (with and without criteria, and an
+exhausted retryLimit) and goto, and a step that runs another workflow. `contested` cases are run and shown, never
+scored: a JSONPath filter over an object body passes under the spec's own example and fails under RFC 9535, and the
+other way round over an array.
+
+`run-exec.py` drives the `runners:` in `tools.yml`. A runner's exit code is not trusted blindly: Arazzo Runner exits
+0 on a failed workflow, so its adapter reads the status it prints.
+
 ## Tools
 
 `tools.yml` lists each tool, the command, and how to read its result. A tool's verdict is its exit code
@@ -51,13 +65,13 @@ mkdir -p $T/node && (cd $T/node && npm init -y && npm pkg set overrides.@speclyn
 python3 -m venv $T/py && $T/py/bin/pip install arazzo-runner pyyaml
 GOBIN=$T/go go install github.com/speakeasy-api/openapi/cmd/openapi@latest
 $T/py/bin/python scripts/build-ae-cases.py      # only after editing the cases
-$T/py/bin/python scripts/run.py --tools $T      # writes results/<date>.json and docs/data/latest.json
+$T/py/bin/python scripts/run.py --tools $T      # validation: results/<date>.json, docs/data/latest.json
+$T/py/bin/python scripts/run-exec.py --tools $T # execution: results/exec-<date>.json, docs/data/exec-latest.json
 ```
 
 ## Not yet covered
 
-- Execution. Runners (Arazzo Runner, Redocly Respect) are scored only on loading. The next tier runs
-  workflows against a mock of `cases/ae/sources/petstore.openapi.yaml` and checks outputs and control flow.
+- Execution of 1.1.0 workflows (AsyncAPI steps need a broker), workflow `outputs` values, and `dependsOn` order.
 - Tools without a published CLI: usearazzo `arazzo-toolkit`, libopenapi's arazzo package, itarazzo (Java).
 
 ## License
