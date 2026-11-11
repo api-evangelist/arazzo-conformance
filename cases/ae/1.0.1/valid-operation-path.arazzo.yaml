@@ -1,0 +1,38 @@
+arazzo: 1.0.1
+info:
+  title: 'valid-operation-path: a step may target an operation by operationPath (JSON Pointer into the source)'
+  version: 1.0.0
+sourceDescriptions:
+- name: petstore
+  url: ../sources/petstore.openapi.yaml
+  type: openapi
+workflows:
+- workflowId: adoptPet
+  inputs:
+    type: object
+    properties:
+      name:
+        type: string
+  steps:
+  - stepId: create
+    operationId: createPet
+    requestBody:
+      contentType: application/json
+      payload:
+        name: $inputs.name
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      petId: $response.body#/id
+  - stepId: fetch
+    parameters:
+    - name: petId
+      in: path
+      value: $steps.create.outputs.petId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      status: $response.body#/status
+    operationPath: '{$sourceDescriptions.petstore.url}#/paths/~1pets~1{petId}/get'
+  outputs:
+    petId: $steps.create.outputs.petId

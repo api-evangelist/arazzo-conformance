@@ -1,0 +1,45 @@
+arazzo: 1.0.1
+info:
+  title: 'valid-on-failure-retry: onFailure retry with retryAfter and retryLimit'
+  version: 1.0.0
+sourceDescriptions:
+- name: petstore
+  url: ../sources/petstore.openapi.yaml
+  type: openapi
+workflows:
+- workflowId: adoptPet
+  inputs:
+    type: object
+    properties:
+      name:
+        type: string
+  steps:
+  - stepId: create
+    operationId: createPet
+    requestBody:
+      contentType: application/json
+      payload:
+        name: $inputs.name
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      petId: $response.body#/id
+  - stepId: fetch
+    operationId: getPet
+    parameters:
+    - name: petId
+      in: path
+      value: $steps.create.outputs.petId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      status: $response.body#/status
+    onFailure:
+    - name: retryFetch
+      type: retry
+      retryAfter: 1
+      retryLimit: 3
+      criteria:
+      - condition: $statusCode == 404
+  outputs:
+    petId: $steps.create.outputs.petId

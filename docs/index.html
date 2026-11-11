@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arazzo Conformance</title>
+<meta name="description" content="How the open-source Arazzo tooling judges valid and invalid Arazzo 1.0.1 and 1.1.0 documents, measured by API Evangelist.">
+<style>
+:root{--bg:#fbfbf9;--fg:#1b1d22;--muted:#61656f;--line:#e2e2dc;--card:#fff;--ok:#1f7a4d;--okbg:#e3f3ea;--miss:#b3261e;--missbg:#fbe5e3;--na:#6b6f78;--nabg:#ececea;--accent:#2457c5}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14161a;--fg:#e7e8ea;--muted:#9a9ea8;--line:#2b2e35;--card:#1b1e23;--ok:#6fd39f;--okbg:#173326;--miss:#ff8a80;--missbg:#3a1d1b;--na:#a0a4ad;--nabg:#262930;--accent:#8fb0ff}}
+:root[data-theme="dark"]{--bg:#14161a;--fg:#e7e8ea;--muted:#9a9ea8;--line:#2b2e35;--card:#1b1e23;--ok:#6fd39f;--okbg:#173326;--miss:#ff8a80;--missbg:#3a1d1b;--na:#a0a4ad;--nabg:#262930;--accent:#8fb0ff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:1180px;margin:0 auto;padding:32px 16px 64px}
+h1{font-size:28px;margin:0 0 6px}h2{font-size:19px;margin:40px 0 10px}
+p{margin:0 0 12px;max-width:72ch}.muted{color:var(--muted)}
+a{color:var(--accent)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px}
+.card h3{font-size:15px;margin:0 0 2px}.card .v{font-size:12px;color:var(--muted);margin-bottom:10px;word-break:break-all}
+.row{display:flex;justify-content:space-between;gap:8px;font-size:13px;padding:3px 0;border-top:1px solid var(--line)}
+.row b{font-variant-numeric:tabular-nums}
+.tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:99px;background:var(--nabg);color:var(--na);margin-left:4px}
+.note{font-size:12px;color:var(--muted);margin-top:8px}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 12px}
+select,input{font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg)}
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{position:sticky;top:0;background:var(--card);font-weight:600}
+td.c{text-align:center;white-space:nowrap;cursor:help}
+.ok{background:var(--okbg);color:var(--ok)}.miss{background:var(--missbg);color:var(--miss);font-weight:600}.na{background:var(--nabg);color:var(--na)}
+.case{min-width:280px}.case code{font-size:12px}.case small{display:block;color:var(--muted)}
+</style>
+</head>
+<body>
+<main>
+<h1>Arazzo Conformance</h1>
+<p class="muted" id="sub">Loading…</p>
+<p>Each case is a small Arazzo document that is either valid or breaks exactly one rule of the specification. Every tool is run against every case and judged on one question: did it call the document valid or invalid, and was it right? <b>Schema</b> cases are decided by the official JSON Schema; <b>semantic</b> cases break a rule only the spec's prose states (unique stepIds, operationIds that resolve, runtime expressions that parse), which a schema cannot catch.</p>
+<p class="muted">Cases come from the OAI's own schema tests (Apache-2.0) and from API Evangelist's suite. Source, cases and the runner: <a href="https://github.com/api-evangelist/arazzo-conformance">api-evangelist/arazzo-conformance</a>.</p>
+
+<h2>Scores by tool</h2>
+<div class="cards" id="cards"></div>
+
+<h2>Every case</h2>
+<div class="controls">
+  <select id="fv"><option value="">All versions</option></select>
+  <select id="fl"><option value="">Schema + semantic</option><option>schema</option><option>semantic</option></select>
+  <select id="fe"><option value="">Valid + invalid</option><option>valid</option><option>invalid</option></select>
+  <input id="fq" placeholder="Filter cases" size="18">
+</div>
+<div class="scroll"><table id="grid"></table></div>
+<p class="note">✓ right verdict · ✗ wrong verdict · — tool declined the document's Arazzo version · ! tool crashed. Hover a cell for the tool's output.</p>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+fetch('data/latest.json').then(r => r.json()).then(d => {
+  const tools = Object.keys(d.tools), versions = [...new Set(d.cases.map(c => c.version))].sort();
+  const R = {}; d.results.forEach(r => R[r.tool + '|' + r.case] = r);
+  $('sub').textContent = `${d.cases.length} cases × ${tools.length} tools · run ${d.date}`;
+  versions.forEach(v => $('fv').insertAdjacentHTML('beforeend', `<option>${v}</option>`));
+
+  $('cards').innerHTML = tools.map(t => {
+    const m = d.tools[t];
+    const rows = versions.map(v => {
+      const rs = d.results.filter(r => r.tool === t && r.version === v);
+      const unsup = rs.filter(r => r.verdict === 'unsupported').length;
+      if (unsup > rs.length / 2) return `<div class="row"><span>Arazzo ${v}</span><span class="muted">version not supported</span></div>`;
+      const run = rs.filter(r => r.verdict !== 'unsupported');
+      const part = lvl => { const x = run.filter(r => r.level === lvl); return x.length ? `${lvl} <b>${x.filter(r => r.pass).length}/${x.length}</b>` : ''; };
+      const val = run.filter(r => r.expect === 'valid'), inv = run.filter(r => r.expect === 'invalid');
+      return `<div class="row"><span>Arazzo ${v}</span><b>${run.filter(r => r.pass).length}/${run.length}</b></div>
+        <div class="row muted"><span>accepts valid <b>${val.filter(r => r.pass).length}/${val.length}</b></span><span>rejects invalid <b>${inv.filter(r => r.pass).length}/${inv.length}</b></span></div>
+        <div class="row muted"><span>${part('schema')}</span><span>${part('semantic')}</span></div>`;
+    }).join('');
+    const role = m.role === 'loads' ? '<span class="tag">loader, not a validator</span>' : m.role === 'reference' ? '<span class="tag">reference</span>' : '';
+    return `<div class="card"><h3><a href="${esc(m.repo)}">${esc(m.name)}</a>${role}</h3><div class="v">${esc(m.version)}</div>${rows}${m.notes ? `<div class="note">${esc(m.notes)}</div>` : ''}</div>`;
+  }).join('');
+
+  const draw = () => {
+    const v = $('fv').value, l = $('fl').value, e = $('fe').value, q = $('fq').value.toLowerCase();
+    const cs = d.cases.filter(c => (!v || c.version === v) && (!l || c.level === l) && (!e || c.expect === e) && (!q || (c.id + c.rule).toLowerCase().includes(q)));
+    $('grid').innerHTML = `<tr><th class="case">Case</th><th>Ver</th><th>Expect</th>${tools.map(t => `<th>${esc(d.tools[t].name.split(' (')[0])}</th>`).join('')}</tr>` +
+      cs.map(c => `<tr><td class="case"><a href="https://github.com/api-evangelist/arazzo-conformance/blob/main/${esc(c.file)}"><code>${esc(c.id)}</code></a><small>${esc(c.rule)} · ${c.level} · <a href="${esc(c.spec)}">spec</a></small>${c.note ? `<small>${esc(c.note)}</small>` : ''}</td><td>${c.version}</td><td>${c.expect}</td>` +
+        tools.map(t => { const r = R[t + '|' + c.id]; if (!r) return '<td></td>';
+          const [cls, sym] = r.verdict === 'unsupported' ? ['na', '—'] : ['error', 'timeout'].includes(r.verdict) ? ['miss', '!'] : r.pass ? ['ok', '✓'] : ['miss', '✗'];
+          return `<td class="c ${cls}" title="${esc(r.verdict + ' (exit ' + r.exit + ')\n' + r.tail.slice(-400))}">${sym}</td>`; }).join('') + '</tr>').join('');
+  };
+  ['fv', 'fl', 'fe'].forEach(id => $(id).onchange = draw); $('fq').oninput = draw; draw();
+});
+</script>
+</body>
+</html>

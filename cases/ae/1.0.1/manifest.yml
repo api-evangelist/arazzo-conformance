@@ -1,0 +1,278 @@
+suite: ae
+cases:
+- id: valid-base
+  file: valid-base.arazzo.yaml
+  version: 1.0.1
+  expect: valid
+  level: schema
+  rule: 'the base document: two steps, request body, path parameter, runtime expressions'
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#arazzo-description
+- id: valid-operation-path
+  file: valid-operation-path.arazzo.yaml
+  version: 1.0.1
+  expect: valid
+  level: schema
+  rule: a step may target an operation by operationPath (JSON Pointer into the source)
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#step-object
+- id: valid-source-qualified-operation-id
+  file: valid-source-qualified-operation-id.arazzo.yaml
+  version: 1.0.1
+  expect: valid
+  level: semantic
+  rule: an operationId may be qualified with $sourceDescriptions.<name>.
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#step-object
+- id: valid-workflow-step
+  file: valid-workflow-step.arazzo.yaml
+  version: 1.0.1
+  expect: valid
+  level: semantic
+  rule: a step may invoke another workflow in the same document by workflowId
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#step-object
+- id: valid-depends-on
+  file: valid-depends-on.arazzo.yaml
+  version: 1.0.1
+  expect: valid
+  level: semantic
+  rule: dependsOn names another workflow that exists
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#workflow-object
+- id: valid-on-success-goto
+  file: valid-on-success-goto.arazzo.yaml
+  version: 1.0.1
+  expect: valid
+  level: semantic
+  rule: onSuccess goto a later stepId
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#success-action-object
+- id: valid-on-failure-retry
+  file: valid-on-failure-retry.arazzo.yaml
+  version: 1.0.1
+  expect: valid
+  level: schema
+  rule: onFailure retry with retryAfter and retryLimit
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#failure-action-object
+- id: valid-criteria-regex-jsonpath
+  file: valid-criteria-regex-jsonpath.arazzo.yaml
+  version: 1.0.1
+  expect: valid
+  level: schema
+  rule: criterion types regex and jsonpath with a context
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#criterion-object
+- id: valid-criterion-expression-type
+  file: valid-criterion-expression-type.arazzo.yaml
+  version: 1.0.1
+  expect: valid
+  level: schema
+  rule: criterion type given as a Criterion Expression Type Object
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#criterion-expression-type-object
+  note: 'The official 1.0 schema rejects this: its anyOf applies criterion-expression-type-object to the Criterion Object itself instead of to its type property,
+    so the documented object form cannot pass.'
+- id: valid-components-reuse
+  file: valid-components-reuse.arazzo.yaml
+  version: 1.0.1
+  expect: valid
+  level: semantic
+  rule: a step parameter reused from components via a Reusable Object
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#reusable-object
+- id: valid-payload-replacements
+  file: valid-payload-replacements.arazzo.yaml
+  version: 1.0.1
+  expect: valid
+  level: schema
+  rule: requestBody replacements target the payload with a JSON Pointer
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#payload-replacement-object
+- id: valid-specification-extensions
+  file: valid-specification-extensions.arazzo.yaml
+  version: 1.0.1
+  expect: valid
+  level: schema
+  rule: x- extensions are allowed on every object
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#specification-extensions
+- id: valid-arazzo-1-0-0
+  file: valid-arazzo-1-0-0.arazzo.yaml
+  version: 1.0.1
+  expect: valid
+  level: schema
+  rule: a 1.0.0 document is still a valid Arazzo 1.0.x document
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#versions
+- id: invalid-missing-info
+  file: invalid-missing-info.arazzo.yaml
+  version: 1.0.1
+  expect: invalid
+  level: schema
+  rule: info is REQUIRED
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#arazzo-description
+- id: invalid-missing-source-descriptions
+  file: invalid-missing-source-descriptions.arazzo.yaml
+  version: 1.0.1
+  expect: invalid
+  level: schema
+  rule: sourceDescriptions is REQUIRED and has at least one entry
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#arazzo-description
+- id: invalid-missing-steps
+  file: invalid-missing-steps.arazzo.yaml
+  version: 1.0.1
+  expect: invalid
+  level: schema
+  rule: a workflow REQUIRES at least one step
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#workflow-object
+- id: invalid-step-two-targets
+  file: invalid-step-two-targets.arazzo.yaml
+  version: 1.0.1
+  expect: invalid
+  level: schema
+  rule: operationId, operationPath and workflowId are mutually exclusive
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#step-object
+- id: invalid-step-no-target
+  file: invalid-step-no-target.arazzo.yaml
+  version: 1.0.1
+  expect: invalid
+  level: schema
+  rule: a step MUST name one of operationId, operationPath or workflowId
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#step-object
+- id: invalid-source-name-pattern
+  file: invalid-source-name-pattern.arazzo.yaml
+  version: 1.0.1
+  expect: invalid
+  level: schema
+  rule: sourceDescription name SHOULD match [A-Za-z0-9_\-]+ (the schema enforces it)
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#source-description-object
+- id: invalid-output-key-pattern
+  file: invalid-output-key-pattern.arazzo.yaml
+  version: 1.0.1
+  expect: invalid
+  level: semantic
+  rule: output keys MUST match ^[a-zA-Z0-9\.\-_]+$
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#step-object
+  note: The spec states the pattern; the official 1.0 schema does not enforce it on step outputs.
+- id: invalid-parameter-in-value
+  file: invalid-parameter-in-value.arazzo.yaml
+  version: 1.0.1
+  expect: invalid
+  level: schema
+  rule: parameter in MUST be path, query, header or cookie
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#parameter-object
+- id: invalid-action-type
+  file: invalid-action-type.arazzo.yaml
+  version: 1.0.1
+  expect: invalid
+  level: schema
+  rule: success action type MUST be end or goto
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#success-action-object
+- id: invalid-arazzo-version
+  file: invalid-arazzo-version.arazzo.yaml
+  version: 1.0.1
+  expect: invalid
+  level: schema
+  rule: arazzo MUST be a 1.0.x version string
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#fixed-fields
+- id: invalid-duplicate-step-id
+  file: invalid-duplicate-step-id.arazzo.yaml
+  version: 1.0.1
+  expect: invalid
+  level: semantic
+  rule: stepId MUST be unique among the steps of a workflow
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#step-object
+- id: invalid-duplicate-workflow-id
+  file: invalid-duplicate-workflow-id.arazzo.yaml
+  version: 1.0.1
+  expect: invalid
+  level: semantic
+  rule: workflowId MUST be unique among the workflows of a description
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#workflow-object
+- id: invalid-unresolved-operation-id
+  file: invalid-unresolved-operation-id.arazzo.yaml
+  version: 1.0.1
+  expect: invalid
+  level: semantic
+  rule: operationId MUST resolve to an operation in a source description
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#step-object
+- id: invalid-unknown-source-qualifier
+  file: invalid-unknown-source-qualifier.arazzo.yaml
+  version: 1.0.1
+  expect: invalid
+  level: semantic
+  rule: a $sourceDescriptions.<name> qualifier MUST name a declared source
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#step-object
+- id: invalid-goto-unknown-step
+  file: invalid-goto-unknown-step.arazzo.yaml
+  version: 1.0.1
+  expect: invalid
+  level: semantic
+  rule: goto stepId MUST name a step in the current workflow
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#success-action-object
+- id: invalid-goto-both-targets
+  file: invalid-goto-both-targets.arazzo.yaml
+  version: 1.0.1
+  expect: invalid
+  level: semantic
+  rule: a goto names stepId OR workflowId, not both
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#success-action-object
+- id: invalid-depends-on-unknown
+  file: invalid-depends-on-unknown.arazzo.yaml
+  version: 1.0.1
+  expect: invalid
+  level: semantic
+  rule: dependsOn MUST name workflows that exist
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#workflow-object
+- id: invalid-step-workflow-unknown
+  file: invalid-step-workflow-unknown.arazzo.yaml
+  version: 1.0.1
+  expect: invalid
+  level: semantic
+  rule: a step workflowId MUST name a workflow that exists
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#step-object
+- id: invalid-duplicate-parameter
+  file: invalid-duplicate-parameter.arazzo.yaml
+  version: 1.0.1
+  expect: invalid
+  level: semantic
+  rule: a parameter is unique by name and in; the list MUST NOT duplicate one
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#step-object
+- id: invalid-operation-parameter-without-in
+  file: invalid-operation-parameter-without-in.arazzo.yaml
+  version: 1.0.1
+  expect: invalid
+  level: semantic
+  rule: a parameter on an operation step MUST specify in
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#parameter-object
+- id: invalid-runtime-expression
+  file: invalid-runtime-expression.arazzo.yaml
+  version: 1.0.1
+  expect: invalid
+  level: semantic
+  rule: runtime expressions MUST follow the ABNF ($resposne is not a source)
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#runtime-expressions
+- id: invalid-step-output-reference
+  file: invalid-step-output-reference.arazzo.yaml
+  version: 1.0.1
+  expect: invalid
+  level: semantic
+  rule: $steps.<id> MUST name a step that exists
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#runtime-expressions
+- id: invalid-unresolved-component
+  file: invalid-unresolved-component.arazzo.yaml
+  version: 1.0.1
+  expect: invalid
+  level: semantic
+  rule: a Reusable Object reference MUST resolve to a component
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#reusable-object
+- id: invalid-criterion-type-without-context
+  file: invalid-criterion-type-without-context.arazzo.yaml
+  version: 1.0.1
+  expect: invalid
+  level: schema
+  rule: context MUST be provided when a criterion type is regex/jsonpath/xpath
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#criterion-object
+- id: invalid-retry-after-negative
+  file: invalid-retry-after-negative.arazzo.yaml
+  version: 1.0.1
+  expect: invalid
+  level: schema
+  rule: retryAfter MUST be a non-negative number
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#failure-action-object
+- id: invalid-workflow-step-with-request-body
+  file: invalid-workflow-step-with-request-body.arazzo.yaml
+  version: 1.0.1
+  expect: invalid
+  level: semantic
+  rule: requestBody is only for steps that target an operation, not a workflow
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#step-object

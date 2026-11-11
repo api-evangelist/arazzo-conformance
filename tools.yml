@@ -1,0 +1,47 @@
+# The tools under test. {f} = the case file, {schema} = the official schema for the case's version,
+# schema-check.mjs is copied into {node} by run.py so it resolves ajv there.
+# {nb} = node_modules/.bin, {node} = the node tools dir, {py} = the python venv bin, {go} = the go bin dir, {suite} = this repo.
+# role: validates = says valid/invalid; loads = only parses what it will run (a pass means it loaded, not that it checked).
+# A tool's verdict is its exit code: 0 = valid, non-zero = invalid, unless an `error` pattern says it crashed instead,
+# or an `unsupported` pattern says it declined the document's Arazzo version (scored apart, never as a pass or a fail).
+tools:
+  - id: oai-schema
+    name: Official OAI JSON Schema (ajv)
+    repo: https://github.com/OAI/Arazzo-Specification
+    role: reference
+    version_cmd: "cat {suite}/cases/oai/SOURCE"
+    cmd: "node {node}/schema-check.mjs {schema} {f}"
+  - id: spectral
+    name: Spectral (spectral:arazzo)
+    repo: https://github.com/stoplightio/spectral
+    role: validates
+    version_cmd: "{nb}/spectral --version"
+    cmd: "{nb}/spectral lint -r {suite}/rulesets/spectral-arazzo.yaml -F error {f}"
+    unsupported: 'unrecognized-format'
+  - id: redocly
+    name: Redocly CLI lint
+    repo: https://github.com/Redocly/redocly-cli
+    role: validates
+    version_cmd: "{nb}/redocly --version"
+    cmd: "{nb}/redocly lint --format=stylish {f}"
+  - id: jentic-validator
+    name: Jentic Arazzo Validator
+    repo: https://github.com/jentic/jentic-arazzo-tools
+    role: validates
+    version_cmd: "node -p \"require('{node}/node_modules/@jentic/arazzo-validator/package.json').version\""
+    cmd: "{nb}/arazzo-validator {f}"
+    notes: "On Node 22.12 this release returns zero diagnostics for the README's own failing example (CLI, library API, JSON and stdin alike; alpha.20 the same), so its misses on invalid cases may be an environment problem, not its rules."
+  - id: speakeasy-openapi
+    name: Speakeasy openapi CLI (arazzo validate)
+    repo: https://github.com/speakeasy-api/openapi
+    role: validates
+    version_cmd: "{go}/openapi --version"
+    cmd: "{go}/openapi arazzo validate {f}"
+    unsupported: 'validation-supported-version'
+  - id: arazzo-runner
+    name: Arazzo Runner (list-workflows)
+    repo: https://github.com/jentic/arazzo-engine
+    role: loads
+    version_cmd: "{py}/pip show arazzo-runner | grep Version"
+    cmd: "{py}/arazzo-runner list-workflows {f}"
+    error: 'Traceback'

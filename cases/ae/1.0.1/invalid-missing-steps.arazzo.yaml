@@ -1,0 +1,18 @@
+arazzo: 1.0.1
+info:
+  title: 'invalid-missing-steps: a workflow REQUIRES at least one step'
+  version: 1.0.0
+sourceDescriptions:
+- name: petstore
+  url: ../sources/petstore.openapi.yaml
+  type: openapi
+workflows:
+- workflowId: adoptPet
+  inputs:
+    type: object
+    properties:
+      name:
+        type: string
+  steps: []
+  outputs:
+    petId: $steps.create.outputs.petId
