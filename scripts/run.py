@@ -85,6 +85,14 @@ def main():
             rows.append({'tool': t['id'], 'case': c['id'], 'suite': c['suite'], 'version': c['version'], 'level': c['level'], 'expect': c['expect'],
                          'verdict': verdict, 'pass': None if c['expect'] == 'contested' else verdict == c['expect'], 'exit': code, 'tail': out.replace(SUITE, '.')[-600:]})
             print(f"{t['id']:18s} {c['id'][:60]:60s} expect={c['expect']:7s} got={verdict:7s} {'ok' if verdict == c['expect'] else 'MISS'}")
+    # --only re-runs some tools: keep every other tool's rows from the existing run for this date.
+    prev = f'{SUITE}/results/{date}.json'
+    if only and os.path.exists(prev):
+        old = json.load(open(prev))
+        meta = {t: m for t, m in old['tools'].items() if t not in meta} | meta
+        rows = [r for r in old['results'] if r['tool'] not in only] + rows
+        order = [t['id'] for t in yaml.safe_load(open(f'{SUITE}/tools.yml'))['tools']]
+        meta = dict(sorted(meta.items(), key=lambda kv: order.index(kv[0]) if kv[0] in order else 99))
     doc = {'date': date, 'tools': meta, 'cases': [{k: c[k] for k in ('id', 'suite', 'version', 'level', 'expect', 'rule', 'spec', 'file', 'note') if k in c} for c in cases], 'results': rows}
     os.makedirs(f'{SUITE}/results', exist_ok=True); os.makedirs(f'{SUITE}/docs/data', exist_ok=True)
     for p in (f'{SUITE}/results/{date}.json', f'{SUITE}/docs/data/latest.json'):
