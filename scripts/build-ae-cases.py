@@ -124,22 +124,94 @@ CASES = [
      lambda d: d['workflows'].append({'workflowId': 'wrapper', 'steps': [{'stepId': 's', 'workflowId': 'adoptPet', 'requestBody': {'payload': {'name': 'x'}}}]})),
 ]
 
-def main():
-    for f in os.listdir(OUT):
-        if f.endswith('.arazzo.yaml'): os.remove(os.path.join(OUT, f))
+# ---- Arazzo 1.1.0: the same base at 1.1.0, plus an AsyncAPI source for the event steps.
+# The OAI's 1.1.0 tests already cover the schema rules for the new fields; these cover the feature use and the prose rules.
+SPEC_11 = 'https://spec.openapis.org/arazzo/v1.1.0.html'
+BASE_11 = copy.deepcopy(BASE) | {'arazzo': '1.1.0'}
+
+def with_events(d):
+    d['sourceDescriptions'].append({'name': 'orders', 'url': '../sources/orders.asyncapi.yaml', 'type': 'asyncapi'})
+    # with two non-arazzo sources, every operationId MUST be source-qualified
+    for w in d['workflows']:
+        for s in w['steps']:
+            if 'operationId' in s and not s['operationId'].startswith('$'): s['operationId'] = '$sourceDescriptions.petstore.' + s['operationId']
+
+def order_steps(d, receive=None):
+    with_events(d)
+    wf(d)['steps'] += [
+        {'stepId': 'placeOrder', 'operationId': '$sourceDescriptions.orders.placeOrder', 'action': 'send',
+         'requestBody': {'payload': {'petId': '$steps.create.outputs.petId'}}},
+        receive or {'stepId': 'awaitStatus', 'operationId': '$sourceDescriptions.orders.onOrderStatus', 'action': 'receive',
+                    'correlationId': '$steps.create.outputs.petId', 'timeout': 30000,
+                    'outputs': {'orderStatus': '$message.payload#/status'}},
+    ]
+
+CASES_11 = [
+    ('valid-base', 'valid', 'schema', 'the 1.0.1 base document, declared as 1.1.0', 'arazzo-description', lambda d: None),
+    ('valid-self', 'valid', 'schema', '$self gives the description its own base URI', 'arazzo-self',
+     lambda d: d.update({'$self': 'https://example.com/arazzo/adopt.arazzo.yaml'})),
+    ('valid-step-timeout', 'valid', 'schema', 'a step may set timeout in milliseconds', 'step-timeout',
+     lambda d: step(d, 1).update(timeout=5000)),
+    ('valid-step-depends-on', 'valid', 'semantic', 'a step may depend on an earlier stepId in the same workflow', 'step-depends-on',
+     lambda d: step(d, 1).update(dependsOn=['create'])),
+    ('valid-step-depends-on-cross-workflow', 'valid', 'semantic', 'a step may depend on a step in another workflow via $workflows.<id>.steps.<stepId>', 'step-depends-on',
+     lambda d: d['workflows'].append({'workflowId': 'listAfter', 'steps': [{'stepId': 'list', 'operationId': 'listPets', 'dependsOn': ['$workflows.adoptPet.steps.create']}]})),
+    ('valid-asyncapi-send-receive', 'valid', 'semantic', 'AsyncAPI send and receive steps with correlationId and a $message output', 'step-object',
+     lambda d: order_steps(d)),
+    ('valid-success-action-parameters', 'valid', 'schema', 'a goto to a workflow may pass parameters (without in)', 'success-action-object',
+     lambda d: (d['workflows'].append({'workflowId': 'notify', 'inputs': {'type': 'object', 'properties': {'petId': {'type': 'string'}}},
+                                       'steps': [{'stepId': 'list', 'operationId': 'listPets'}]}),
+                step(d, 1).update(onSuccess=[{'name': 'tell', 'type': 'goto', 'workflowId': 'notify',
+                                              'parameters': [{'name': 'petId', 'value': '$steps.create.outputs.petId'}]}]))),
+    ('valid-target-selector-jsonpointer', 'valid', 'schema', 'a payload replacement may declare targetSelectorType jsonpointer', 'payload-replacement-object',
+     lambda d: step(d, 0)['requestBody'].update(replacements=[{'target': '/status', 'targetSelectorType': 'jsonpointer', 'value': 'available'}])),
+
+    ('invalid-step-depends-on-unknown', 'invalid', 'semantic', 'each dependsOn value MUST be a stepId that exists', 'step-depends-on',
+     lambda d: step(d, 1).update(dependsOn=['nowhere'])),
+    ('invalid-step-depends-on-unknown-workflow', 'invalid', 'semantic', '$workflows.<id>.steps.<stepId> MUST name a workflow and step that exist', 'step-depends-on',
+     lambda d: step(d, 1).update(dependsOn=['$workflows.ghost.steps.create'])),
+    ('invalid-unqualified-operation-id-multiple-sources', 'invalid', 'semantic', 'with several non-arazzo sources, operationId MUST be source-qualified', 'step-operation-id',
+     lambda d: (order_steps(d), step(d, 0).update(operationId='createPet'))),
+    ('invalid-asyncapi-operation-unresolved', 'invalid', 'semantic', 'an AsyncAPI operationId MUST resolve in the asyncapi source', 'step-operation-id',
+     lambda d: (order_steps(d), step(d, 2).update(operationId='$sourceDescriptions.orders.cancelOrder'))),
+    ('invalid-action-mismatch', 'invalid', 'semantic', 'action MUST match the AsyncAPI operation (placeOrder is a send operation)', 'step-action',
+     lambda d: (order_steps(d), step(d, 2).update(action='receive'))),
+    ('invalid-success-action-parameter-in', 'invalid', 'semantic', 'parameters on a success action MUST NOT use in', 'success-action-object',
+     lambda d: (d['workflows'].append({'workflowId': 'notify', 'steps': [{'stepId': 'list', 'operationId': 'listPets'}]}),
+                step(d, 1).update(onSuccess=[{'name': 'tell', 'type': 'goto', 'workflowId': 'notify',
+                                              'parameters': [{'name': 'petId', 'in': 'query', 'value': 'x'}]}]))),
+    ('invalid-message-expression-on-openapi-step', 'invalid', 'semantic', '$message is only defined for AsyncAPI steps; an OpenAPI step has a $response', 'runtime-expressions',
+     lambda d: step(d, 0).update(outputs={'petId': '$message.payload#/id'})),
+    ('invalid-duplicate-step-id', 'invalid', 'semantic', 'stepId MUST be unique among the steps of a workflow (carried over from 1.0)', 'step-object',
+     lambda d: step(d, 1).update(stepId='create')),
+    ('invalid-unresolved-operation-id', 'invalid', 'semantic', 'operationId MUST resolve to an operation in a source description (carried over from 1.0)', 'step-operation-id',
+     lambda d: step(d, 0).update(operationId='adoptPetNow')),
+    ('invalid-goto-unknown-step', 'invalid', 'semantic', 'goto stepId MUST name a step in the current workflow (carried over from 1.0)', 'success-action-object',
+     lambda d: step(d, 0).update(onSuccess=[{'name': 'jump', 'type': 'goto', 'stepId': 'nowhere'}])),
+]
+
+def write(version, base, cases, spec, prefix=''):
+    out = os.path.join(HERE, '..', 'cases', 'ae', version)
+    os.makedirs(out, exist_ok=True)
+    for f in os.listdir(out):
+        if f.endswith('.arazzo.yaml'): os.remove(os.path.join(out, f))
     manifest = []
-    for cid, expect, level, rule, anchor, mutate in CASES:
-        d = copy.deepcopy(BASE)
+    for cid, expect, level, rule, anchor, mutate in cases:
+        d = copy.deepcopy(base)
         mutate(d)
         if 'info' in d: d['info']['title'] = f'{cid}: {rule}'[:200]
         fn = f'{cid}.arazzo.yaml'
-        with open(os.path.join(OUT, fn), 'w') as fh:
+        with open(os.path.join(out, fn), 'w') as fh:
             yaml.safe_dump(d, fh, sort_keys=False, allow_unicode=True, width=140)
-        manifest.append({'id': cid, 'file': fn, 'version': '1.0.1', 'expect': expect, 'level': level, 'rule': rule, 'spec': f'{SPEC}#{anchor}'}
-                        | ({'note': NOTES[cid]} if cid in NOTES else {}))
-    with open(os.path.join(OUT, 'manifest.yml'), 'w') as fh:
+        manifest.append({'id': prefix + cid, 'file': fn, 'version': version, 'expect': expect, 'level': level, 'rule': rule, 'spec': f'{spec}#{anchor}'}
+                        | ({'note': NOTES[cid]} if cid in NOTES and version == '1.0.1' else {}))
+    with open(os.path.join(out, 'manifest.yml'), 'w') as fh:
         yaml.safe_dump({'suite': 'ae', 'cases': manifest}, fh, sort_keys=False, allow_unicode=True, width=160)
-    print(len(manifest), 'cases ->', os.path.relpath(OUT))
+    print(len(manifest), 'cases ->', os.path.relpath(out))
+
+def main():
+    write('1.0.1', BASE, CASES, SPEC)
+    write('1.1.0', BASE_11, CASES_11, SPEC_11, prefix='1.1-')
 
 if __name__ == '__main__':
     main()

@@ -1,0 +1,50 @@
+arazzo: 1.1.0
+info:
+  title: 'invalid-success-action-parameter-in: parameters on a success action MUST NOT use in'
+  version: 1.0.0
+sourceDescriptions:
+- name: petstore
+  url: ../sources/petstore.openapi.yaml
+  type: openapi
+workflows:
+- workflowId: adoptPet
+  inputs:
+    type: object
+    properties:
+      name:
+        type: string
+  steps:
+  - stepId: create
+    operationId: createPet
+    requestBody:
+      contentType: application/json
+      payload:
+        name: $inputs.name
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      petId: $response.body#/id
+  - stepId: fetch
+    operationId: getPet
+    parameters:
+    - name: petId
+      in: path
+      value: $steps.create.outputs.petId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      status: $response.body#/status
+    onSuccess:
+    - name: tell
+      type: goto
+      workflowId: notify
+      parameters:
+      - name: petId
+        in: query
+        value: x
+  outputs:
+    petId: $steps.create.outputs.petId
+- workflowId: notify
+  steps:
+  - stepId: list
+    operationId: listPets

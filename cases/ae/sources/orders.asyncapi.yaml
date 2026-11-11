@@ -1,0 +1,39 @@
+asyncapi: 3.0.0
+info:
+  title: Conformance Orders Events
+  version: 1.0.0
+channels:
+  orders:
+    address: orders
+    messages:
+      orderPlaced:
+        $ref: '#/components/messages/OrderPlaced'
+  orderStatus:
+    address: orders.status
+    messages:
+      orderStatus:
+        $ref: '#/components/messages/OrderStatus'
+operations:
+  placeOrder:
+    action: send
+    channel: {$ref: '#/channels/orders'}
+  onOrderStatus:
+    action: receive
+    channel: {$ref: '#/channels/orderStatus'}
+components:
+  correlationIds:
+    byOrder:
+      location: $message.header#/correlationId
+  messages:
+    OrderPlaced:
+      correlationId: {$ref: '#/components/correlationIds/byOrder'}
+      payload:
+        type: object
+        properties:
+          petId: {type: string}
+    OrderStatus:
+      correlationId: {$ref: '#/components/correlationIds/byOrder'}
+      payload:
+        type: object
+        properties:
+          status: {type: string}

@@ -1,0 +1,128 @@
+suite: ae
+cases:
+- id: 1.1-valid-base
+  file: valid-base.arazzo.yaml
+  version: 1.1.0
+  expect: valid
+  level: schema
+  rule: the 1.0.1 base document, declared as 1.1.0
+  spec: https://spec.openapis.org/arazzo/v1.1.0.html#arazzo-description
+- id: 1.1-valid-self
+  file: valid-self.arazzo.yaml
+  version: 1.1.0
+  expect: valid
+  level: schema
+  rule: $self gives the description its own base URI
+  spec: https://spec.openapis.org/arazzo/v1.1.0.html#arazzo-self
+- id: 1.1-valid-step-timeout
+  file: valid-step-timeout.arazzo.yaml
+  version: 1.1.0
+  expect: valid
+  level: schema
+  rule: a step may set timeout in milliseconds
+  spec: https://spec.openapis.org/arazzo/v1.1.0.html#step-timeout
+- id: 1.1-valid-step-depends-on
+  file: valid-step-depends-on.arazzo.yaml
+  version: 1.1.0
+  expect: valid
+  level: semantic
+  rule: a step may depend on an earlier stepId in the same workflow
+  spec: https://spec.openapis.org/arazzo/v1.1.0.html#step-depends-on
+- id: 1.1-valid-step-depends-on-cross-workflow
+  file: valid-step-depends-on-cross-workflow.arazzo.yaml
+  version: 1.1.0
+  expect: valid
+  level: semantic
+  rule: a step may depend on a step in another workflow via $workflows.<id>.steps.<stepId>
+  spec: https://spec.openapis.org/arazzo/v1.1.0.html#step-depends-on
+- id: 1.1-valid-asyncapi-send-receive
+  file: valid-asyncapi-send-receive.arazzo.yaml
+  version: 1.1.0
+  expect: valid
+  level: semantic
+  rule: AsyncAPI send and receive steps with correlationId and a $message output
+  spec: https://spec.openapis.org/arazzo/v1.1.0.html#step-object
+- id: 1.1-valid-success-action-parameters
+  file: valid-success-action-parameters.arazzo.yaml
+  version: 1.1.0
+  expect: valid
+  level: schema
+  rule: a goto to a workflow may pass parameters (without in)
+  spec: https://spec.openapis.org/arazzo/v1.1.0.html#success-action-object
+- id: 1.1-valid-target-selector-jsonpointer
+  file: valid-target-selector-jsonpointer.arazzo.yaml
+  version: 1.1.0
+  expect: valid
+  level: schema
+  rule: a payload replacement may declare targetSelectorType jsonpointer
+  spec: https://spec.openapis.org/arazzo/v1.1.0.html#payload-replacement-object
+- id: 1.1-invalid-step-depends-on-unknown
+  file: invalid-step-depends-on-unknown.arazzo.yaml
+  version: 1.1.0
+  expect: invalid
+  level: semantic
+  rule: each dependsOn value MUST be a stepId that exists
+  spec: https://spec.openapis.org/arazzo/v1.1.0.html#step-depends-on
+- id: 1.1-invalid-step-depends-on-unknown-workflow
+  file: invalid-step-depends-on-unknown-workflow.arazzo.yaml
+  version: 1.1.0
+  expect: invalid
+  level: semantic
+  rule: $workflows.<id>.steps.<stepId> MUST name a workflow and step that exist
+  spec: https://spec.openapis.org/arazzo/v1.1.0.html#step-depends-on
+- id: 1.1-invalid-unqualified-operation-id-multiple-sources
+  file: invalid-unqualified-operation-id-multiple-sources.arazzo.yaml
+  version: 1.1.0
+  expect: invalid
+  level: semantic
+  rule: with several non-arazzo sources, operationId MUST be source-qualified
+  spec: https://spec.openapis.org/arazzo/v1.1.0.html#step-operation-id
+- id: 1.1-invalid-asyncapi-operation-unresolved
+  file: invalid-asyncapi-operation-unresolved.arazzo.yaml
+  version: 1.1.0
+  expect: invalid
+  level: semantic
+  rule: an AsyncAPI operationId MUST resolve in the asyncapi source
+  spec: https://spec.openapis.org/arazzo/v1.1.0.html#step-operation-id
+- id: 1.1-invalid-action-mismatch
+  file: invalid-action-mismatch.arazzo.yaml
+  version: 1.1.0
+  expect: invalid
+  level: semantic
+  rule: action MUST match the AsyncAPI operation (placeOrder is a send operation)
+  spec: https://spec.openapis.org/arazzo/v1.1.0.html#step-action
+- id: 1.1-invalid-success-action-parameter-in
+  file: invalid-success-action-parameter-in.arazzo.yaml
+  version: 1.1.0
+  expect: invalid
+  level: semantic
+  rule: parameters on a success action MUST NOT use in
+  spec: https://spec.openapis.org/arazzo/v1.1.0.html#success-action-object
+- id: 1.1-invalid-message-expression-on-openapi-step
+  file: invalid-message-expression-on-openapi-step.arazzo.yaml
+  version: 1.1.0
+  expect: invalid
+  level: semantic
+  rule: $message is only defined for AsyncAPI steps; an OpenAPI step has a $response
+  spec: https://spec.openapis.org/arazzo/v1.1.0.html#runtime-expressions
+- id: 1.1-invalid-duplicate-step-id
+  file: invalid-duplicate-step-id.arazzo.yaml
+  version: 1.1.0
+  expect: invalid
+  level: semantic
+  rule: stepId MUST be unique among the steps of a workflow (carried over from 1.0)
+  spec: https://spec.openapis.org/arazzo/v1.1.0.html#step-object
+- id: 1.1-invalid-unresolved-operation-id
+  file: invalid-unresolved-operation-id.arazzo.yaml
+  version: 1.1.0
+  expect: invalid
+  level: semantic
+  rule: operationId MUST resolve to an operation in a source description (carried over from 1.0)
+  spec: https://spec.openapis.org/arazzo/v1.1.0.html#step-operation-id
+- id: 1.1-invalid-goto-unknown-step
+  file: invalid-goto-unknown-step.arazzo.yaml
+  version: 1.1.0
+  expect: invalid
+  level: semantic
+  rule: goto stepId MUST name a step in the current workflow (carried over from 1.0)
+  spec: https://spec.openapis.org/arazzo/v1.1.0.html#success-action-object
