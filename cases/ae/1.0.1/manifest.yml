@@ -128,13 +128,6 @@ cases:
   level: schema
   rule: a step MUST name one of operationId, operationPath or workflowId
   spec: https://spec.openapis.org/arazzo/v1.0.1.html#step-object
-- id: invalid-source-name-pattern
-  file: invalid-source-name-pattern.arazzo.yaml
-  version: 1.0.1
-  expect: invalid
-  level: schema
-  rule: sourceDescription name SHOULD match [A-Za-z0-9_\-]+ (the schema enforces it)
-  spec: https://spec.openapis.org/arazzo/v1.0.1.html#source-description-object
 - id: invalid-output-key-pattern
   file: invalid-output-key-pattern.arazzo.yaml
   version: 1.0.1

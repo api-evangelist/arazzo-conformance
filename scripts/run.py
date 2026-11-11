@@ -4,6 +4,14 @@ Usage: run.py [--tools TOOLDIR] [--only id,id] [--date YYYY-MM-DD]
 TOOLDIR holds node/ (npm installs), py/ (venv) and go/ (go install bin). See README for the install lines."""
 import datetime, glob, json, os, re, shutil, subprocess, sys, yaml
 
+# Released Arazzo versions. Declining a document that claims any other version is the right answer: it is invalid.
+RELEASED = {'1.0.0', '1.0.1', '1.1.0'}
+# OAI marks these pass/ because the schema accepts them; the spec's prose does not.
+OAI_OVERRIDES = {
+    'oai-1.0.1-pass-bnpl-example': 'Uses $response.body.redirectAuthToken and $response.headers.Location; the runtime expression ABNF allows only $response.body#/<json-pointer> and $response.header.<name>.',
+    'oai-1.0.1-pass-oauth-example': 'A jsonpath criterion with condition "$.access_token != null" is not a JSONPath query; a comparison needs a filter selector.',
+    'oai-1.0.1-pass-pet-coupons-example': 'Sets a Reusable Object value to the integer 1 and 10; the 1.0.1 spec types value as a string.',
+}
 SUITE = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 def load_cases():
@@ -21,6 +29,11 @@ def load_cases():
         cases.append({'id': f'oai-{version}-{kind}-{name}', 'suite': 'oai', 'version': version, 'path': f, 'file': os.path.relpath(f, SUITE),
                       'expect': 'invalid' if (kind == 'fail' or charac) else 'valid', 'level': 'semantic' if charac else 'schema',
                       'rule': name.replace('-', ' '), 'spec': f'https://spec.openapis.org/arazzo/v{version}.html'})
+    for c in cases:
+        if c['id'] in OAI_OVERRIDES:
+            c.update(expect='invalid', level='semantic', note=OAI_OVERRIDES[c['id']])
+        try: c['declared'] = str((yaml.safe_load(open(c['path'])) or {}).get('arazzo'))
+        except Exception: c['declared'] = None
     return cases
 
 def run(cmd, timeout=60):
@@ -49,14 +62,15 @@ def main():
             meta[t['id']] = {k: t.get(k, '') for k in ('name', 'repo', 'role')} | {'version': '', 'notes': t['skip'], 'skipped': True}
             continue
         _, v = run(t['version_cmd'].format(**env))
-        meta[t['id']] = {k: t.get(k, '') for k in ('name', 'repo', 'role', 'notes')} | {'version': v.strip().splitlines()[-1] if v.strip() else ''}
+        meta[t['id']] = {k: t.get(k, '') for k in ('name', 'repo', 'role', 'notes', 'claims')} | {'version': v.strip().splitlines()[-1] if v.strip() else ''}
         for c in cases:
             schema = f"{SUITE}/schemas/{c['version']}/schema.yaml"
             code, out = run(t['cmd'].format(f=c['path'], schema=schema, **env))
             out = re.sub(r'\x1b\[[0-9;]*[A-Za-z]', '', out).strip()
             if code == -1: verdict = 'timeout'
             elif t.get('error') and re.search(t['error'], out): verdict = 'error'
-            elif t.get('unsupported') and re.search(t['unsupported'], out): verdict = 'unsupported'
+            elif t.get('unsupported') and re.search(t['unsupported'], out):
+                verdict = 'unsupported' if c.get('declared') in RELEASED else 'invalid'
             else: verdict = 'valid' if code == 0 else 'invalid'
             rows.append({'tool': t['id'], 'case': c['id'], 'suite': c['suite'], 'version': c['version'], 'level': c['level'], 'expect': c['expect'],
                          'verdict': verdict, 'pass': verdict == c['expect'], 'exit': code, 'tail': out.replace(SUITE, '.')[-600:]})

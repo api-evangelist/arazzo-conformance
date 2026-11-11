@@ -40,7 +40,7 @@ To add a tool, add an entry to `tools.yml` and re-run.
 
 ```sh
 T=$PWD/.tools
-mkdir -p $T/node && (cd $T/node && npm init -y && npm i @stoplight/spectral-cli @redocly/cli @jentic/arazzo-validator ajv ajv-formats js-yaml)
+mkdir -p $T/node && (cd $T/node && npm init -y && npm pkg set overrides.@speclynx/apidom-ls=2.11.7 && npm i @stoplight/spectral-cli @redocly/cli @jentic/arazzo-validator ajv ajv-formats js-yaml)
 python3 -m venv $T/py && $T/py/bin/pip install arazzo-runner pyyaml
 GOBIN=$T/go go install github.com/speakeasy-api/openapi/cmd/openapi@latest
 $T/py/bin/python scripts/build-ae-cases.py      # only after editing the cases

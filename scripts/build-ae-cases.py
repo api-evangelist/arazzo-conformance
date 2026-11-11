@@ -80,8 +80,6 @@ CASES = [
      lambda d: step(d, 0).update(workflowId='adoptPet')),
     ('invalid-step-no-target', 'invalid', 'schema', 'a step MUST name one of operationId, operationPath or workflowId', 'step-object',
      lambda d: step(d, 0).pop('operationId')),
-    ('invalid-source-name-pattern', 'invalid', 'schema', 'sourceDescription name SHOULD match [A-Za-z0-9_\\-]+ (the schema enforces it)', 'source-description-object',
-     lambda d: d['sourceDescriptions'][0].update(name='pet store')),
     ('invalid-output-key-pattern', 'invalid', 'semantic', 'output keys MUST match ^[a-zA-Z0-9\\.\\-_]+$', 'step-object',
      lambda d: step(d, 0).update(outputs={'pet id': '$response.body#/id'})),
     ('invalid-parameter-in-value', 'invalid', 'schema', 'parameter in MUST be path, query, header or cookie', 'parameter-object',

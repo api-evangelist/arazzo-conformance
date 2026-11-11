@@ -72,7 +72,8 @@ fetch('data/latest.json').then(r => r.json()).then(d => {
       const run = rs.filter(r => r.verdict !== 'unsupported');
       const part = lvl => { const x = run.filter(r => r.level === lvl); return x.length ? `${lvl} <b>${x.filter(r => r.pass).length}/${x.length}</b>` : ''; };
       const val = run.filter(r => r.expect === 'valid'), inv = run.filter(r => r.expect === 'invalid');
-      return `<div class="row"><span>Arazzo ${v}</span><b>${run.filter(r => r.pass).length}/${run.length}</b></div>
+      const unclaimed = m.claims && m.claims.length && !m.claims.map(String).includes(v) ? ' <span class="tag">not claimed</span>' : '';
+      return `<div class="row"><span>Arazzo ${v}${unclaimed}</span><b>${run.filter(r => r.pass).length}/${run.length}</b></div>
         <div class="row muted"><span>accepts valid <b>${val.filter(r => r.pass).length}/${val.length}</b></span><span>rejects invalid <b>${inv.filter(r => r.pass).length}/${inv.length}</b></span></div>
         <div class="row muted"><span>${part('schema')}</span><span>${part('semantic')}</span></div>`;
     }).join('');
