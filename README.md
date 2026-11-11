@@ -65,6 +65,7 @@ mkdir -p $T/node && (cd $T/node && npm init -y && npm pkg set overrides.@speclyn
 python3 -m venv $T/py && $T/py/bin/pip install arazzo-runner pyyaml
 mkdir -p $T/node-usearazzo && (cd $T/node-usearazzo && npm init -y && npm i @usearazzo/cli @usearazzo/runner)   # apart: it needs a newer apidom-ls
 GOBIN=$T/go go install github.com/speakeasy-api/openapi/cmd/openapi@latest
+(cd scripts/libopenapi-arazzo && GOBIN=$T/go go install .)   # a CLI around libopenapi's arazzo package
 $T/py/bin/python scripts/build-ae-cases.py      # only after editing the cases
 $T/py/bin/python scripts/run.py --tools $T      # validation: results/<date>.json, docs/data/latest.json
 $T/py/bin/python scripts/run-exec.py --tools $T # execution: results/exec-<date>.json, docs/data/exec-latest.json
@@ -73,7 +74,7 @@ $T/py/bin/python scripts/run-exec.py --tools $T # execution: results/exec-<date>
 ## Not yet covered
 
 - Execution of 1.1.0 workflows (AsyncAPI steps need a broker), workflow `outputs` values, and `dependsOn` order.
-- libopenapi's arazzo package (Go, no CLI) and itarazzo (Java).
+- itarazzo (Java).
 
 ## License
 

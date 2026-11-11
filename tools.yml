@@ -59,6 +59,15 @@ tools:
     version_cmd: "{ub}/usearazzo --version"
     cmd: "{ub}/usearazzo validate --json-schema-validation {f}"
     notes: "Run with --json-schema-validation, which is off by default. Installed on its own: it needs a newer @speclynx/apidom-ls than the 2.11.7 the Jentic validator is pinned to, and under that pin it reports no problems at all."
+  - id: libopenapi
+    claims: [1.0.0, 1.0.1]
+    name: libopenapi arazzo.Validate
+    repo: https://github.com/pb33f/libopenapi
+    role: validates
+    version_cmd: "go version -m {go}/libopenapi-arazzo | grep pb33f/libopenapi"
+    cmd: "{go}/libopenapi-arazzo validate {f}"
+    unsupported: 'unsupported arazzo version'
+    notes: "A Go library with no CLI; scripts/libopenapi-arazzo wraps arazzo.Validate. Its own version check accepts 1.0.x only."
 
 # The execution tier (scripts/run-exec.py): whole workflows run against scripts/mock-petstore.py on 127.0.0.1:4010.
 # {workflow} = the workflow to run, {inputs} = the inputs as JSON, {inputs_kv} = the inputs as `-i key=value` flags.
@@ -81,3 +90,9 @@ runners:
     version_cmd: "node -p \"require('{unode}/node_modules/@usearazzo/runner/package.json').version\""
     cmd: "node {unode}/usearazzo-run.mjs {f} {workflow} '{inputs}'"
     notes: "A library with no CLI; scripts/usearazzo-run.mjs calls ArazzoRunner.load and execute."
+  - id: libopenapi
+    name: libopenapi arazzo engine
+    repo: https://github.com/pb33f/libopenapi
+    version_cmd: "go version -m {go}/libopenapi-arazzo | grep pb33f/libopenapi"
+    cmd: "{go}/libopenapi-arazzo run {f} {workflow} '{inputs}'"
+    notes: "The library leaves HTTP to the caller, so scripts/libopenapi-arazzo carries a minimal executor. ExecutionRequest passes parameters by name only, without their `in`, so that executor places each one where the source OpenAPI operation declares it; a parameter the operation does not declare cannot be placed."
