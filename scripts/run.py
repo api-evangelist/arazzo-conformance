@@ -26,7 +26,7 @@ def load_cases():
     for m in sorted(glob.glob(f'{SUITE}/cases/ae/*/manifest.yml')):
         d = os.path.dirname(m)
         for c in yaml.safe_load(open(m))['cases']:
-            cases.append(dict(c, suite='ae', path=os.path.join(d, c['file'])))
+            cases.append(dict(c, suite='ae', path=os.path.join(d, c['file']), file=os.path.relpath(os.path.join(d, c['file']), SUITE)))
     # OAI's own schema tests: pass/ = valid, fail/ = invalid. A characterization-* case passes the schema
     # on purpose while breaking a rule stated in prose, so for a validator the right answer is invalid.
     for f in sorted(glob.glob(f'{SUITE}/cases/oai/*/*/*.yaml')):

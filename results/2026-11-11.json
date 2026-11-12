@@ -95,7 +95,7 @@
    "expect": "valid",
    "rule": "the base document: two steps, request body, path parameter, runtime expressions",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#arazzo-description",
-   "file": "valid-base.arazzo.yaml"
+   "file": "cases/ae/1.0.1/valid-base.arazzo.yaml"
   },
   {
    "id": "valid-operation-path",
@@ -105,7 +105,7 @@
    "expect": "valid",
    "rule": "a step may target an operation by operationPath (JSON Pointer into the source)",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#step-object",
-   "file": "valid-operation-path.arazzo.yaml"
+   "file": "cases/ae/1.0.1/valid-operation-path.arazzo.yaml"
   },
   {
    "id": "valid-source-qualified-operation-id",
@@ -115,7 +115,7 @@
    "expect": "valid",
    "rule": "an operationId may be qualified with $sourceDescriptions.<name>.",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#step-object",
-   "file": "valid-source-qualified-operation-id.arazzo.yaml"
+   "file": "cases/ae/1.0.1/valid-source-qualified-operation-id.arazzo.yaml"
   },
   {
    "id": "valid-workflow-step",
@@ -125,7 +125,7 @@
    "expect": "valid",
    "rule": "a step may invoke another workflow in the same document by workflowId",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#step-object",
-   "file": "valid-workflow-step.arazzo.yaml"
+   "file": "cases/ae/1.0.1/valid-workflow-step.arazzo.yaml"
   },
   {
    "id": "valid-depends-on",
@@ -135,7 +135,7 @@
    "expect": "valid",
    "rule": "dependsOn names another workflow that exists",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#workflow-object",
-   "file": "valid-depends-on.arazzo.yaml"
+   "file": "cases/ae/1.0.1/valid-depends-on.arazzo.yaml"
   },
   {
    "id": "valid-on-success-goto",
@@ -145,7 +145,7 @@
    "expect": "valid",
    "rule": "onSuccess goto a later stepId",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#success-action-object",
-   "file": "valid-on-success-goto.arazzo.yaml"
+   "file": "cases/ae/1.0.1/valid-on-success-goto.arazzo.yaml"
   },
   {
    "id": "valid-on-failure-retry",
@@ -155,7 +155,7 @@
    "expect": "valid",
    "rule": "onFailure retry with retryAfter and retryLimit",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#failure-action-object",
-   "file": "valid-on-failure-retry.arazzo.yaml"
+   "file": "cases/ae/1.0.1/valid-on-failure-retry.arazzo.yaml"
   },
   {
    "id": "valid-criteria-regex-jsonpath",
@@ -165,7 +165,7 @@
    "expect": "valid",
    "rule": "criterion types regex and jsonpath with a context",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#criterion-object",
-   "file": "valid-criteria-regex-jsonpath.arazzo.yaml"
+   "file": "cases/ae/1.0.1/valid-criteria-regex-jsonpath.arazzo.yaml"
   },
   {
    "id": "valid-criterion-expression-type",
@@ -175,7 +175,7 @@
    "expect": "valid",
    "rule": "criterion type given as a Criterion Expression Type Object",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#criterion-expression-type-object",
-   "file": "valid-criterion-expression-type.arazzo.yaml",
+   "file": "cases/ae/1.0.1/valid-criterion-expression-type.arazzo.yaml",
    "note": "The official 1.0 schema rejects this: its anyOf applies criterion-expression-type-object to the Criterion Object itself instead of to its type property, so the documented object form cannot pass."
   },
   {
@@ -186,7 +186,7 @@
    "expect": "valid",
    "rule": "a step parameter reused from components via a Reusable Object",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#reusable-object",
-   "file": "valid-components-reuse.arazzo.yaml"
+   "file": "cases/ae/1.0.1/valid-components-reuse.arazzo.yaml"
   },
   {
    "id": "valid-payload-replacements",
@@ -196,7 +196,7 @@
    "expect": "valid",
    "rule": "requestBody replacements target the payload with a JSON Pointer",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#payload-replacement-object",
-   "file": "valid-payload-replacements.arazzo.yaml"
+   "file": "cases/ae/1.0.1/valid-payload-replacements.arazzo.yaml"
   },
   {
    "id": "valid-specification-extensions",
@@ -206,7 +206,7 @@
    "expect": "valid",
    "rule": "x- extensions are allowed on every object",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#specification-extensions",
-   "file": "valid-specification-extensions.arazzo.yaml"
+   "file": "cases/ae/1.0.1/valid-specification-extensions.arazzo.yaml"
   },
   {
    "id": "valid-arazzo-1-0-0",
@@ -216,7 +216,7 @@
    "expect": "valid",
    "rule": "a 1.0.0 document is still a valid Arazzo 1.0.x document",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#versions",
-   "file": "valid-arazzo-1-0-0.arazzo.yaml"
+   "file": "cases/ae/1.0.1/valid-arazzo-1-0-0.arazzo.yaml"
   },
   {
    "id": "invalid-missing-info",
@@ -226,7 +226,7 @@
    "expect": "invalid",
    "rule": "info is REQUIRED",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#arazzo-description",
-   "file": "invalid-missing-info.arazzo.yaml"
+   "file": "cases/ae/1.0.1/invalid-missing-info.arazzo.yaml"
   },
   {
    "id": "invalid-missing-source-descriptions",
@@ -236,7 +236,7 @@
    "expect": "invalid",
    "rule": "sourceDescriptions is REQUIRED and has at least one entry",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#arazzo-description",
-   "file": "invalid-missing-source-descriptions.arazzo.yaml"
+   "file": "cases/ae/1.0.1/invalid-missing-source-descriptions.arazzo.yaml"
   },
   {
    "id": "invalid-missing-steps",
@@ -246,7 +246,7 @@
    "expect": "invalid",
    "rule": "a workflow REQUIRES at least one step",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#workflow-object",
-   "file": "invalid-missing-steps.arazzo.yaml"
+   "file": "cases/ae/1.0.1/invalid-missing-steps.arazzo.yaml"
   },
   {
    "id": "invalid-step-two-targets",
@@ -256,7 +256,7 @@
    "expect": "invalid",
    "rule": "operationId, operationPath and workflowId are mutually exclusive",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#step-object",
-   "file": "invalid-step-two-targets.arazzo.yaml"
+   "file": "cases/ae/1.0.1/invalid-step-two-targets.arazzo.yaml"
   },
   {
    "id": "invalid-step-no-target",
@@ -266,7 +266,7 @@
    "expect": "invalid",
    "rule": "a step MUST name one of operationId, operationPath or workflowId",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#step-object",
-   "file": "invalid-step-no-target.arazzo.yaml"
+   "file": "cases/ae/1.0.1/invalid-step-no-target.arazzo.yaml"
   },
   {
    "id": "invalid-output-key-pattern",
@@ -276,7 +276,7 @@
    "expect": "invalid",
    "rule": "output keys MUST match ^[a-zA-Z0-9\\.\\-_]+$",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#step-object",
-   "file": "invalid-output-key-pattern.arazzo.yaml",
+   "file": "cases/ae/1.0.1/invalid-output-key-pattern.arazzo.yaml",
    "note": "The spec states the pattern; the official 1.0 schema does not enforce it on step outputs."
   },
   {
@@ -287,7 +287,7 @@
    "expect": "invalid",
    "rule": "parameter in MUST be path, query, header or cookie",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#parameter-object",
-   "file": "invalid-parameter-in-value.arazzo.yaml"
+   "file": "cases/ae/1.0.1/invalid-parameter-in-value.arazzo.yaml"
   },
   {
    "id": "invalid-action-type",
@@ -297,7 +297,7 @@
    "expect": "invalid",
    "rule": "success action type MUST be end or goto",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#success-action-object",
-   "file": "invalid-action-type.arazzo.yaml"
+   "file": "cases/ae/1.0.1/invalid-action-type.arazzo.yaml"
   },
   {
    "id": "invalid-arazzo-version",
@@ -307,7 +307,7 @@
    "expect": "invalid",
    "rule": "arazzo MUST be a 1.0.x version string",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#fixed-fields",
-   "file": "invalid-arazzo-version.arazzo.yaml"
+   "file": "cases/ae/1.0.1/invalid-arazzo-version.arazzo.yaml"
   },
   {
    "id": "invalid-duplicate-step-id",
@@ -317,7 +317,7 @@
    "expect": "invalid",
    "rule": "stepId MUST be unique among the steps of a workflow",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#step-object",
-   "file": "invalid-duplicate-step-id.arazzo.yaml"
+   "file": "cases/ae/1.0.1/invalid-duplicate-step-id.arazzo.yaml"
   },
   {
    "id": "invalid-duplicate-workflow-id",
@@ -327,7 +327,7 @@
    "expect": "invalid",
    "rule": "workflowId MUST be unique among the workflows of a description",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#workflow-object",
-   "file": "invalid-duplicate-workflow-id.arazzo.yaml"
+   "file": "cases/ae/1.0.1/invalid-duplicate-workflow-id.arazzo.yaml"
   },
   {
    "id": "invalid-unresolved-operation-id",
@@ -337,7 +337,7 @@
    "expect": "invalid",
    "rule": "operationId MUST resolve to an operation in a source description",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#step-object",
-   "file": "invalid-unresolved-operation-id.arazzo.yaml"
+   "file": "cases/ae/1.0.1/invalid-unresolved-operation-id.arazzo.yaml"
   },
   {
    "id": "invalid-unknown-source-qualifier",
@@ -347,7 +347,7 @@
    "expect": "invalid",
    "rule": "a $sourceDescriptions.<name> qualifier MUST name a declared source",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#step-object",
-   "file": "invalid-unknown-source-qualifier.arazzo.yaml"
+   "file": "cases/ae/1.0.1/invalid-unknown-source-qualifier.arazzo.yaml"
   },
   {
    "id": "invalid-goto-unknown-step",
@@ -357,7 +357,7 @@
    "expect": "invalid",
    "rule": "goto stepId MUST name a step in the current workflow",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#success-action-object",
-   "file": "invalid-goto-unknown-step.arazzo.yaml"
+   "file": "cases/ae/1.0.1/invalid-goto-unknown-step.arazzo.yaml"
   },
   {
    "id": "invalid-goto-both-targets",
@@ -367,7 +367,7 @@
    "expect": "invalid",
    "rule": "a goto names stepId OR workflowId, not both",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#success-action-object",
-   "file": "invalid-goto-both-targets.arazzo.yaml"
+   "file": "cases/ae/1.0.1/invalid-goto-both-targets.arazzo.yaml"
   },
   {
    "id": "invalid-depends-on-unknown",
@@ -377,7 +377,7 @@
    "expect": "invalid",
    "rule": "dependsOn MUST name workflows that exist",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#workflow-object",
-   "file": "invalid-depends-on-unknown.arazzo.yaml"
+   "file": "cases/ae/1.0.1/invalid-depends-on-unknown.arazzo.yaml"
   },
   {
    "id": "invalid-step-workflow-unknown",
@@ -387,7 +387,7 @@
    "expect": "invalid",
    "rule": "a step workflowId MUST name a workflow that exists",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#step-object",
-   "file": "invalid-step-workflow-unknown.arazzo.yaml"
+   "file": "cases/ae/1.0.1/invalid-step-workflow-unknown.arazzo.yaml"
   },
   {
    "id": "invalid-duplicate-parameter",
@@ -397,7 +397,7 @@
    "expect": "invalid",
    "rule": "a parameter is unique by name and in; the list MUST NOT duplicate one",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#step-object",
-   "file": "invalid-duplicate-parameter.arazzo.yaml"
+   "file": "cases/ae/1.0.1/invalid-duplicate-parameter.arazzo.yaml"
   },
   {
    "id": "invalid-operation-parameter-without-in",
@@ -407,7 +407,7 @@
    "expect": "invalid",
    "rule": "a parameter on an operation step MUST specify in",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#parameter-object",
-   "file": "invalid-operation-parameter-without-in.arazzo.yaml"
+   "file": "cases/ae/1.0.1/invalid-operation-parameter-without-in.arazzo.yaml"
   },
   {
    "id": "invalid-runtime-expression",
@@ -417,7 +417,7 @@
    "expect": "invalid",
    "rule": "runtime expressions MUST follow the ABNF ($resposne is not a source)",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#runtime-expressions",
-   "file": "invalid-runtime-expression.arazzo.yaml"
+   "file": "cases/ae/1.0.1/invalid-runtime-expression.arazzo.yaml"
   },
   {
    "id": "invalid-step-output-reference",
@@ -427,7 +427,7 @@
    "expect": "invalid",
    "rule": "$steps.<id> MUST name a step that exists",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#runtime-expressions",
-   "file": "invalid-step-output-reference.arazzo.yaml"
+   "file": "cases/ae/1.0.1/invalid-step-output-reference.arazzo.yaml"
   },
   {
    "id": "invalid-unresolved-component",
@@ -437,7 +437,7 @@
    "expect": "invalid",
    "rule": "a Reusable Object reference MUST resolve to a component",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#reusable-object",
-   "file": "invalid-unresolved-component.arazzo.yaml"
+   "file": "cases/ae/1.0.1/invalid-unresolved-component.arazzo.yaml"
   },
   {
    "id": "invalid-criterion-type-without-context",
@@ -447,7 +447,7 @@
    "expect": "invalid",
    "rule": "context MUST be provided when a criterion type is regex/jsonpath/xpath",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#criterion-object",
-   "file": "invalid-criterion-type-without-context.arazzo.yaml"
+   "file": "cases/ae/1.0.1/invalid-criterion-type-without-context.arazzo.yaml"
   },
   {
    "id": "invalid-retry-after-negative",
@@ -457,7 +457,7 @@
    "expect": "invalid",
    "rule": "retryAfter MUST be a non-negative number",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#failure-action-object",
-   "file": "invalid-retry-after-negative.arazzo.yaml"
+   "file": "cases/ae/1.0.1/invalid-retry-after-negative.arazzo.yaml"
   },
   {
    "id": "invalid-workflow-step-with-request-body",
@@ -467,7 +467,7 @@
    "expect": "invalid",
    "rule": "requestBody is only for steps that target an operation, not a workflow",
    "spec": "https://spec.openapis.org/arazzo/v1.0.1.html#step-object",
-   "file": "invalid-workflow-step-with-request-body.arazzo.yaml"
+   "file": "cases/ae/1.0.1/invalid-workflow-step-with-request-body.arazzo.yaml"
   },
   {
    "id": "1.1-valid-base",
@@ -477,7 +477,7 @@
    "expect": "valid",
    "rule": "the 1.0.1 base document, declared as 1.1.0",
    "spec": "https://spec.openapis.org/arazzo/v1.1.0.html#arazzo-description",
-   "file": "valid-base.arazzo.yaml"
+   "file": "cases/ae/1.1.0/valid-base.arazzo.yaml"
   },
   {
    "id": "1.1-valid-self",
@@ -487,7 +487,7 @@
    "expect": "valid",
    "rule": "$self gives the description its own base URI",
    "spec": "https://spec.openapis.org/arazzo/v1.1.0.html#arazzo-self",
-   "file": "valid-self.arazzo.yaml"
+   "file": "cases/ae/1.1.0/valid-self.arazzo.yaml"
   },
   {
    "id": "1.1-valid-step-timeout",
@@ -497,7 +497,7 @@
    "expect": "valid",
    "rule": "a step may set timeout in milliseconds",
    "spec": "https://spec.openapis.org/arazzo/v1.1.0.html#step-timeout",
-   "file": "valid-step-timeout.arazzo.yaml"
+   "file": "cases/ae/1.1.0/valid-step-timeout.arazzo.yaml"
   },
   {
    "id": "1.1-valid-step-depends-on",
@@ -507,7 +507,7 @@
    "expect": "valid",
    "rule": "a step may depend on an earlier stepId in the same workflow",
    "spec": "https://spec.openapis.org/arazzo/v1.1.0.html#step-depends-on",
-   "file": "valid-step-depends-on.arazzo.yaml"
+   "file": "cases/ae/1.1.0/valid-step-depends-on.arazzo.yaml"
   },
   {
    "id": "1.1-valid-step-depends-on-cross-workflow",
@@ -517,7 +517,7 @@
    "expect": "valid",
    "rule": "a step may depend on a step in another workflow via $workflows.<id>.steps.<stepId>",
    "spec": "https://spec.openapis.org/arazzo/v1.1.0.html#step-depends-on",
-   "file": "valid-step-depends-on-cross-workflow.arazzo.yaml"
+   "file": "cases/ae/1.1.0/valid-step-depends-on-cross-workflow.arazzo.yaml"
   },
   {
    "id": "1.1-valid-asyncapi-send-receive",
@@ -527,7 +527,7 @@
    "expect": "valid",
    "rule": "AsyncAPI send and receive steps with correlationId and a $message output",
    "spec": "https://spec.openapis.org/arazzo/v1.1.0.html#step-object",
-   "file": "valid-asyncapi-send-receive.arazzo.yaml"
+   "file": "cases/ae/1.1.0/valid-asyncapi-send-receive.arazzo.yaml"
   },
   {
    "id": "1.1-valid-success-action-parameters",
@@ -537,7 +537,7 @@
    "expect": "valid",
    "rule": "a goto to a workflow may pass parameters (without in)",
    "spec": "https://spec.openapis.org/arazzo/v1.1.0.html#success-action-object",
-   "file": "valid-success-action-parameters.arazzo.yaml"
+   "file": "cases/ae/1.1.0/valid-success-action-parameters.arazzo.yaml"
   },
   {
    "id": "1.1-valid-target-selector-jsonpointer",
@@ -547,7 +547,7 @@
    "expect": "valid",
    "rule": "a payload replacement may declare targetSelectorType jsonpointer",
    "spec": "https://spec.openapis.org/arazzo/v1.1.0.html#payload-replacement-object",
-   "file": "valid-target-selector-jsonpointer.arazzo.yaml"
+   "file": "cases/ae/1.1.0/valid-target-selector-jsonpointer.arazzo.yaml"
   },
   {
    "id": "1.1-invalid-step-depends-on-unknown",
@@ -557,7 +557,7 @@
    "expect": "invalid",
    "rule": "each dependsOn value MUST be a stepId that exists",
    "spec": "https://spec.openapis.org/arazzo/v1.1.0.html#step-depends-on",
-   "file": "invalid-step-depends-on-unknown.arazzo.yaml"
+   "file": "cases/ae/1.1.0/invalid-step-depends-on-unknown.arazzo.yaml"
   },
   {
    "id": "1.1-invalid-step-depends-on-unknown-workflow",
@@ -567,7 +567,7 @@
    "expect": "invalid",
    "rule": "$workflows.<id>.steps.<stepId> MUST name a workflow and step that exist",
    "spec": "https://spec.openapis.org/arazzo/v1.1.0.html#step-depends-on",
-   "file": "invalid-step-depends-on-unknown-workflow.arazzo.yaml"
+   "file": "cases/ae/1.1.0/invalid-step-depends-on-unknown-workflow.arazzo.yaml"
   },
   {
    "id": "1.1-invalid-unqualified-operation-id-multiple-sources",
@@ -577,7 +577,7 @@
    "expect": "invalid",
    "rule": "with several non-arazzo sources, operationId MUST be source-qualified",
    "spec": "https://spec.openapis.org/arazzo/v1.1.0.html#step-operation-id",
-   "file": "invalid-unqualified-operation-id-multiple-sources.arazzo.yaml"
+   "file": "cases/ae/1.1.0/invalid-unqualified-operation-id-multiple-sources.arazzo.yaml"
   },
   {
    "id": "1.1-invalid-asyncapi-operation-unresolved",
@@ -587,7 +587,7 @@
    "expect": "invalid",
    "rule": "an AsyncAPI operationId MUST resolve in the asyncapi source",
    "spec": "https://spec.openapis.org/arazzo/v1.1.0.html#step-operation-id",
-   "file": "invalid-asyncapi-operation-unresolved.arazzo.yaml"
+   "file": "cases/ae/1.1.0/invalid-asyncapi-operation-unresolved.arazzo.yaml"
   },
   {
    "id": "1.1-invalid-action-mismatch",
@@ -597,7 +597,7 @@
    "expect": "invalid",
    "rule": "action MUST match the AsyncAPI operation (placeOrder is a send operation)",
    "spec": "https://spec.openapis.org/arazzo/v1.1.0.html#step-action",
-   "file": "invalid-action-mismatch.arazzo.yaml"
+   "file": "cases/ae/1.1.0/invalid-action-mismatch.arazzo.yaml"
   },
   {
    "id": "1.1-invalid-success-action-parameter-in",
@@ -607,7 +607,7 @@
    "expect": "invalid",
    "rule": "parameters on a success action MUST NOT use in",
    "spec": "https://spec.openapis.org/arazzo/v1.1.0.html#success-action-object",
-   "file": "invalid-success-action-parameter-in.arazzo.yaml"
+   "file": "cases/ae/1.1.0/invalid-success-action-parameter-in.arazzo.yaml"
   },
   {
    "id": "1.1-invalid-message-expression-on-openapi-step",
@@ -617,7 +617,7 @@
    "expect": "invalid",
    "rule": "$message is only defined for AsyncAPI steps; an OpenAPI step has a $response",
    "spec": "https://spec.openapis.org/arazzo/v1.1.0.html#runtime-expressions",
-   "file": "invalid-message-expression-on-openapi-step.arazzo.yaml"
+   "file": "cases/ae/1.1.0/invalid-message-expression-on-openapi-step.arazzo.yaml"
   },
   {
    "id": "1.1-invalid-duplicate-step-id",
@@ -627,7 +627,7 @@
    "expect": "invalid",
    "rule": "stepId MUST be unique among the steps of a workflow (carried over from 1.0)",
    "spec": "https://spec.openapis.org/arazzo/v1.1.0.html#step-object",
-   "file": "invalid-duplicate-step-id.arazzo.yaml"
+   "file": "cases/ae/1.1.0/invalid-duplicate-step-id.arazzo.yaml"
   },
   {
    "id": "1.1-invalid-unresolved-operation-id",
@@ -637,7 +637,7 @@
    "expect": "invalid",
    "rule": "operationId MUST resolve to an operation in a source description (carried over from 1.0)",
    "spec": "https://spec.openapis.org/arazzo/v1.1.0.html#step-operation-id",
-   "file": "invalid-unresolved-operation-id.arazzo.yaml"
+   "file": "cases/ae/1.1.0/invalid-unresolved-operation-id.arazzo.yaml"
   },
   {
    "id": "1.1-invalid-goto-unknown-step",
@@ -647,7 +647,7 @@
    "expect": "invalid",
    "rule": "goto stepId MUST name a step in the current workflow (carried over from 1.0)",
    "spec": "https://spec.openapis.org/arazzo/v1.1.0.html#success-action-object",
-   "file": "invalid-goto-unknown-step.arazzo.yaml"
+   "file": "cases/ae/1.1.0/invalid-goto-unknown-step.arazzo.yaml"
   },
   {
    "id": "oai-1.0.1-fail-invalid-arazzo-version",
