@@ -32,7 +32,7 @@ def main():
     while a:
         k = a.pop(0)
         if k == '--only': only = set(a.pop(0).split(','))
-        elif k == '--tools': tooldir = a.pop(0)
+        elif k == '--tools': tooldir = os.path.abspath(a.pop(0))
         elif k == '--jobs': jobs = int(a.pop(0))
         elif k == '--out': out = a.pop(0)
         else: paths.append(os.path.abspath(k))
@@ -48,6 +48,7 @@ def main():
             code, o = run(t['cmd'].format(f=f, schema='', **env), timeout=120)
             o = re.sub(r'\x1b\[[0-9;]*[A-Za-z]', '', o)
             if code == -1: v = 'timeout'
+            elif code == 127: v = 'error'   # the command itself is missing: a harness fault, never a verdict
             elif t.get('error') and re.search(t['error'], o): v = 'error'
             elif t.get('unsupported') and re.search(t['unsupported'], o): v = 'unsupported'
             else: v = 'valid' if code == 0 else 'invalid'
