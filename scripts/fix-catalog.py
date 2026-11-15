@@ -8,6 +8,8 @@
      A comparison against $response.body becomes a simple condition on a JSON Pointer ($response.body#/status == 'done');
      a non-empty check becomes the JSONPath `$.data[0]`, which selects something exactly when the array has an item.
   D  a double-quoted string literal in a simple condition ($statusCode == "ok"); Arazzo literals are single-quoted.
+  E  expression and schema slips the validators all reject: `type: array` with no `items` (gets `items: {}`),
+     `$response.headers.X` (the grammar says `$response.header.X`), and `$steps.<id>.<name>` missing `.outputs.`.
   C  a sourceDescription url that no longer resolves. raw.githubusercontent.com/api-evangelist/<slug>/... has 404ed since
      provider profiles moved to S3; it becomes https://artifacts.apis.io/<slug>/<path>. A relative ../openapi/<file>
      renamed since the workflow was written is relinked to the one spec in that folder declaring every operation the
@@ -189,6 +191,34 @@ def fix_literals(lines, log):
         lines[k] = lines[k].replace(cond, LIT.sub(lambda m: f"{m.group(1)}{m.group(2)}'" + m.group(3).replace("'", "''") + "'", cond), 1)
         log['D-literal'] += 1
 
+HDR = re.compile(r'\$response\.headers\.')
+STEPS = re.compile(r'\$steps\.([A-Za-z0-9_.-]+?)\.(?!outputs\b)([A-Za-z_][\w-]*)\b')
+
+def fix_slips(doc, lines, log):
+    ids = {str(st.get('stepId')) for w in doc.get('workflows') or [] for st in (w or {}).get('steps') or [] if isinstance(st, dict)}
+    for i, line in enumerate(lines):
+        if HDR.search(line):
+            lines[i] = line = HDR.sub('$response.header.', line); log['E-header'] += 1
+        def steps(m):
+            if m.group(1) not in ids: return m.group(0)
+            log['E-steps-outputs'] += 1
+            return f'$steps.{m.group(1)}.outputs.{m.group(2)}'
+        new = STEPS.sub(steps, line)
+        if new != line: lines[i] = new
+    i = 0
+    while i < len(lines):
+        m = re.match(r'^(\s*)(?:- )?type:\s*array\s*$', lines[i])
+        if m:
+            ind = len(lines[i]) - len(lines[i].lstrip(' -')) if lines[i].lstrip().startswith('- ') else len(m.group(1))
+            s = i
+            while s > 0 and lines[s - 1].strip() and (len(lines[s - 1]) - len(lines[s - 1].lstrip())) >= ind and not lines[s - 1].lstrip().startswith('- ') : s -= 1
+            e = i + 1
+            while e < len(lines) and (not lines[e].strip() or len(lines[e]) - len(lines[e].lstrip()) >= ind): e += 1
+            sib = [l for l in lines[s:e] if len(l) - len(l.lstrip()) == ind or l.lstrip().startswith('- ')]
+            if not any(re.match(r'^\s*(- )?items:', l) for l in sib):
+                lines.insert(i + 1, ' ' * ind + 'items: {}\n'); log['E-array-items'] += 1
+        i += 1
+
 def main():
     a = sys.argv[1:]; write = False; out = None; report = None; paths = []
     while a:
@@ -208,7 +238,7 @@ def main():
             log['unfixed'].append({'file': f, 'defect': 'yaml', 'why': str(ex)[:200]}); continue
         if not isinstance(doc, dict) or str(doc.get('arazzo', '')) [:4] != '1.0.': continue
         lines = text.splitlines(keepends=True)
-        fix_sources(f, doc, lines, log); fix_operation_ids(f, doc, lines, log); fix_criteria(f, lines, log); fix_literals(lines, log)
+        fix_sources(f, doc, lines, log); fix_operation_ids(f, doc, lines, log); fix_criteria(f, lines, log); fix_literals(lines, log); fix_slips(doc, lines, log)
         new = ''.join(lines)
         if new == text: continue
         try: yaml.safe_load(new)
