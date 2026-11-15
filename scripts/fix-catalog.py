@@ -242,6 +242,10 @@ def ops_by_route(path):
         _ops[path] = out
     return _ops[path]
 
+def unversioned(route):
+    m, p = route
+    return m, re.sub(r'^/(v\d[\w.]*|beta|api/v\d[\w.]*)(?=/)', '', p)
+
 def fix_archived(path, doc, lines, log):
     oas = [s for s in doc.get('sourceDescriptions') or [] if isinstance(s, dict) and s.get('type', 'openapi') == 'openapi']
     archived = [s for s in oas if re.search(r'/_(superseded|original)/', str(s.get('url', '')))]
@@ -266,6 +270,15 @@ def fix_archived(path, doc, lines, log):
         for f in sorted(glob.glob(f'{top}/*.y*ml') + glob.glob(f'{top}/*.json')):
             inv = {v: k for k, v in ops_by_route(f).items()}
             if all(r in inv for r in need.values()): cands.append((f, inv))
+        if not cands:
+            # Vendor regenerations often move the version into the server url (/v1/foo -> /foo) or bump it
+            # (/v2/foo -> /v3/foo). Compare with a leading version segment removed, still requiring a unique match.
+            for f in sorted(glob.glob(f'{top}/*.y*ml') + glob.glob(f'{top}/*.json')):
+                inv = collections.defaultdict(list)
+                for k, v in ops_by_route(f).items(): inv[unversioned(v)].append(k)
+                if all(len(inv.get(unversioned(r), [])) == 1 for r in need.values()):
+                    cands.append((f, {r: inv[unversioned(r)][0] for r in need.values()}))
+            if len(cands) == 1: log['F-archived-unversioned'] += 1
         if len(cands) != 1:
             log['unfixed'].append({'file': path, 'defect': 'F-archived', 'url': url, 'why': f'{len(cands)} top-level specs declare every route'}); continue
         f, inv = cands[0]
