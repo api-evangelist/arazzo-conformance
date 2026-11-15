@@ -10,6 +10,9 @@
   D  a double-quoted string literal in a simple condition ($statusCode == "ok"); Arazzo literals are single-quoted.
   E  expression and schema slips the validators all reject: `type: array` with no `items` (gets `items: {}`),
      `$response.headers.X` (the grammar says `$response.header.X`), and `$steps.<id>.<name>` missing `.outputs.`.
+  F  a source pointing into openapi/_superseded/ or _original/ (archived copies, not the published set). Relinked to
+     the ONE top-level spec declaring every operation (same HTTP method + path) the workflow calls through it, with
+     each operationId remapped to that spec's id. No unique match -> listed.
   C  a sourceDescription url that no longer resolves. raw.githubusercontent.com/api-evangelist/<slug>/... has 404ed since
      provider profiles moved to S3; it becomes https://artifacts.apis.io/<slug>/<path>. A relative ../openapi/<file>
      renamed since the workflow was written is relinked to the one spec in that folder declaring every operation the
@@ -77,10 +80,15 @@ def fix_sources(path, doc, lines, log):
                 others = [operation_ids(spec_path(path, str(o.get('url', '')))) or set() for o in oas if o is not s and spec_path(path, str(o.get('url', ''))) and os.path.exists(spec_path(path, str(o.get('url', ''))))]
                 need = {i for i in ids if not i.startswith('$') and not any(i in o for o in others)}
             cands = [f for f in sorted(glob.glob(f'{folder}/*.y*ml') + glob.glob(f'{folder}/*.json')) if need and need <= (operation_ids(f) or set())] if os.path.isdir(folder) else []
+            if not cands and os.path.isdir(folder):
+                # No published spec has them: fall back to the archived copies (_original/, _superseded/, _ae-authored/),
+                # which are published too. The operations are real; the current spec set lost them (see the report).
+                cands = [f for f in sorted(glob.glob(f'{folder}/_*/*.y*ml') + glob.glob(f'{folder}/_*/*.json')) if need and need <= (operation_ids(f) or set())]
+                if len(cands) == 1: log['C-relinked-archived'] += 1
             if len(cands) != 1:
                 log['unfixed'].append({'file': path, 'defect': 'C-source', 'url': url, 'why': f'renamed source matches {len(cands)} specs' if os.path.isdir(folder) else 'source folder missing'})
                 continue
-            rel = os.path.basename(cands[0])
+            rel = os.path.relpath(cands[0], folder)
             new = new[:new.rfind('/') + 1] + rel if '://' in new else os.path.join(os.path.dirname(url), rel)
             log['C-relinked'] += 1
         if new != url and set_url(lines, url, new):
@@ -219,6 +227,59 @@ def fix_slips(doc, lines, log):
                 lines.insert(i + 1, ' ' * ind + 'items: {}\n'); log['E-array-items'] += 1
         i += 1
 
+_ops = {}
+def ops_by_route(path):
+    """{operationId: (METHOD, path)} for one spec, cached."""
+    if path not in _ops:
+        out = {}
+        try:
+            d = yaml.safe_load(open(path))
+            for route, item in (d.get('paths') or {}).items():
+                for m, op in (item or {}).items() if isinstance(item, dict) else []:
+                    if isinstance(op, dict) and op.get('operationId'): out[str(op['operationId'])] = (m.upper(), re.sub(r'\{[^}]*\}', '{}', route))
+        except Exception:
+            pass
+        _ops[path] = out
+    return _ops[path]
+
+def fix_archived(path, doc, lines, log):
+    oas = [s for s in doc.get('sourceDescriptions') or [] if isinstance(s, dict) and s.get('type', 'openapi') == 'openapi']
+    archived = [s for s in oas if re.search(r'/_(superseded|original)/', str(s.get('url', '')))]
+    if not archived: return
+    steps = [st for w in doc.get('workflows') or [] for st in (w or {}).get('steps') or [] if isinstance(st, dict) and st.get('operationId')]
+    for s in archived:
+        url = str(s['url']); old = spec_path(path, url)
+        if not old or not os.path.exists(old):
+            log['unfixed'].append({'file': path, 'defect': 'F-archived', 'url': url, 'why': 'archived source missing'}); continue
+        routes = ops_by_route(old)
+        prefix = f'$sourceDescriptions.{s["name"]}.'
+        mine = [st for st in steps if str(st['operationId']).startswith(prefix) or (len(oas) == 1 and not str(st['operationId']).startswith('$'))
+                or (not str(st['operationId']).startswith('$') and str(st['operationId']) in routes)]
+        need = {}
+        for st in mine:
+            oid = str(st['operationId']); bare = oid[len(prefix):] if oid.startswith(prefix) else oid
+            if bare in routes: need[oid] = routes[bare]
+        if not need:
+            log['unfixed'].append({'file': path, 'defect': 'F-archived', 'url': url, 'why': 'no step operation found in the archived spec'}); continue
+        top = os.path.join(os.path.dirname(os.path.dirname(old)) if os.path.basename(os.path.dirname(old)).startswith('_') else os.path.dirname(old))
+        cands = []
+        for f in sorted(glob.glob(f'{top}/*.y*ml') + glob.glob(f'{top}/*.json')):
+            inv = {v: k for k, v in ops_by_route(f).items()}
+            if all(r in inv for r in need.values()): cands.append((f, inv))
+        if len(cands) != 1:
+            log['unfixed'].append({'file': path, 'defect': 'F-archived', 'url': url, 'why': f'{len(cands)} top-level specs declare every route'}); continue
+        f, inv = cands[0]
+        new_url = re.sub(r'/_(superseded|original)/.*$', '/' + os.path.basename(f), url)
+        if not set_url(lines, url, new_url): continue
+        for oid, route in need.items():
+            bare = oid[len(prefix):] if oid.startswith(prefix) else oid
+            new_id = (prefix if oid.startswith(prefix) else '') + inv[route]
+            if new_id == oid: continue
+            for i, line in enumerate(lines):
+                m = OPID.match(line)
+                if m and m.group(3) == oid: lines[i] = f'{m.group(1)}{new_id}\n'
+        s['url'] = new_url; log['F-archived-relinked'] += 1
+
 def main():
     a = sys.argv[1:]; write = False; out = None; report = None; paths = []
     while a:
@@ -238,7 +299,7 @@ def main():
             log['unfixed'].append({'file': f, 'defect': 'yaml', 'why': str(ex)[:200]}); continue
         if not isinstance(doc, dict) or str(doc.get('arazzo', '')) [:4] != '1.0.': continue
         lines = text.splitlines(keepends=True)
-        fix_sources(f, doc, lines, log); fix_operation_ids(f, doc, lines, log); fix_criteria(f, lines, log); fix_literals(lines, log); fix_slips(doc, lines, log)
+        fix_archived(f, doc, lines, log); fix_sources(f, doc, lines, log); fix_operation_ids(f, doc, lines, log); fix_criteria(f, lines, log); fix_literals(lines, log); fix_slips(doc, lines, log)
         new = ''.join(lines)
         if new == text: continue
         try: yaml.safe_load(new)
