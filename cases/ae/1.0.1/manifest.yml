@@ -56,6 +56,13 @@ cases:
   level: schema
   rule: criterion types regex and jsonpath with a context
   spec: https://spec.openapis.org/arazzo/v1.0.1.html#criterion-object
+- id: valid-jsonpath-member-named-value
+  file: valid-jsonpath-member-named-value.arazzo.yaml
+  version: 1.0.1
+  expect: valid
+  level: semantic
+  rule: a jsonpath criterion may select a member named value followed by a bracket ($.value[0])
+  spec: https://spec.openapis.org/arazzo/v1.0.1.html#criterion-object
 - id: valid-criterion-expression-type
   file: valid-criterion-expression-type.arazzo.yaml
   version: 1.0.1

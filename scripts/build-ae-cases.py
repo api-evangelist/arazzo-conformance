@@ -59,6 +59,9 @@ CASES = [
     ('valid-criteria-regex-jsonpath', 'valid', 'schema', 'criterion types regex and jsonpath with a context', 'criterion-object',
      lambda d: step(d, 1)['successCriteria'].extend([{'context': '$response.body#/name', 'condition': '^[A-Za-z]+$', 'type': 'regex'},
                                                        {'context': '$response.body', 'condition': '$[?(@.name)]', 'type': 'jsonpath'}])),
+    # `value` is also the name of an RFC 9535 function; as a member name it is still a plain name-shorthand.
+    ('valid-jsonpath-member-named-value', 'valid', 'semantic', 'a jsonpath criterion may select a member named value followed by a bracket ($.value[0])', 'criterion-object',
+     lambda d: step(d, 1)['successCriteria'].append({'context': '$response.body', 'condition': '$.value[0]', 'type': 'jsonpath'})),
     ('valid-criterion-expression-type', 'valid', 'schema', 'criterion type given as a Criterion Expression Type Object', 'criterion-expression-type-object',
      lambda d: step(d, 1)['successCriteria'].append({'context': '$response.body', 'condition': '$.name', 'type': {'type': 'jsonpath', 'version': 'draft-goessner-dispatch-jsonpath-00'}})),
     ('valid-components-reuse', 'valid', 'semantic', 'a step parameter reused from components via a Reusable Object', 'reusable-object',

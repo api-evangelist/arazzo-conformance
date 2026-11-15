@@ -76,6 +76,17 @@ $T/py/bin/python scripts/run-exec.py --tools $T # execution: results/exec-<date>
 - Execution of 1.1.0 workflows (AsyncAPI steps need a broker), workflow `outputs` values, and `dependsOn` order.
 - itarazzo (Java).
 
+## Reported upstream
+
+Findings from this suite, filed or added to the project's tracker (2026-11-15):
+
+- OAI: [pass/ tests that break the expression ABNF](https://github.com/OAI/Arazzo-Specification/issues/636) · [1.0 schema criterion type](https://github.com/OAI/Arazzo-Specification/issues/336) · [Reusable value type](https://github.com/OAI/Arazzo-Specification/issues/431)
+- Jentic validator: [false duplicate workflowId](https://github.com/jentic/jentic-arazzo-tools/issues/360) · [fresh installs validate nothing (apidom-ls 2.13)](https://github.com/jentic/jentic-arazzo-tools/issues/351)
+- Arazzo Runner: [exits 0 on a failed workflow](https://github.com/jentic/arazzo-engine/issues/148) · [retry skipped](https://github.com/jentic/arazzo-engine/issues/141) · [action criteria lack $statusCode](https://github.com/jentic/arazzo-engine/issues/143)
+- UseArazzo: [false duplicate workflowId](https://github.com/usearazzo/arazzo-toolkit/issues/327)
+- Speakeasy: [`$.value[0]` rejected](https://github.com/speakeasy-api/openapi/issues/301)
+- libopenapi: [ExecutionRequest drops parameter location](https://github.com/pb33f/libopenapi/issues/713)
+
 ## License
 
 Code: Apache-2.0. The OAI cases and schemas are Apache-2.0 from the OpenAPI Initiative (see `cases/oai/NOTICE`).
