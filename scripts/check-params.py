@@ -8,7 +8,9 @@ path parameters the operation no longer declares (organizationId vs organization
 With --write it repairs path parameters where the mapping is unambiguous: the step's unknown path parameters and the
 operation's missing ones pair up one to one, either because there is exactly one of each or because their names agree
 once case, punctuation and a plural `s` are ignored (organizationId -> organizationsId). The value is kept.
-Usage: check-params.py [--json OUT] [--write] FILE_OR_DIR ...      (a directory is searched for */arazzo/*.y*ml)"""
+Credentials passed as parameters (Authorization, api_key, token, access_token ...) are not counted unless
+--include-credentials: they belong in the security scheme, but runners accept them and they are not a broken call.
+Usage: check-params.py [--json OUT] [--write] [--include-credentials] FILE_OR_DIR ...      (a directory is searched for */arazzo/*.y*ml)"""
 import collections, glob, json, os, re, sys
 import yaml
 
@@ -44,6 +46,9 @@ def resolve(doc_path, url):
     if re.match(r'^[a-z]+://', url): return None
     return os.path.normpath(os.path.join(os.path.dirname(doc_path), url))
 
+CRED = re.compile(r'^(auth\w*|api[-_]?key|apikey|key|token|access[-_]?token|bearer|x-api[-\w]*|x-auth[-\w]*|client[-_]?(id|secret)|secret)$', re.I)
+INCLUDE_CREDENTIALS = False
+
 def check(path):
     out = []
     d = yaml.safe_load(open(path))
@@ -65,7 +70,8 @@ def check(path):
             if not hit or hit[2]: continue          # unresolved, or parameters behind $ref: not judged here
             declared, req_path, _ = hit
             given = {(p.get('name'), p.get('in')) for p in st.get('parameters') or [] if isinstance(p, dict) and 'in' in p}
-            unknown = sorted(f'{n}({i})' for n, i in given - declared if i in ('path', 'query', 'header'))
+            unknown = sorted(f'{n}({i})' for n, i in given - declared
+                             if i in ('path', 'query', 'header') and (INCLUDE_CREDENTIALS or not CRED.match(str(n))))
             missing = sorted(req_path - {n for n, i in given if i == 'path'})
             if unknown or missing:
                 out.append({'step': st.get('stepId'), 'operationId': oid, 'unknown': unknown, 'missing': missing})
@@ -112,6 +118,8 @@ def main():
         k = a.pop(0)
         if k == '--json': out = a.pop(0)
         elif k == '--write': write = True
+        elif k == '--include-credentials':
+            global INCLUDE_CREDENTIALS; INCLUDE_CREDENTIALS = True
         elif os.path.isdir(k): files += sorted(f for f in glob.glob(f'{k}/*/arazzo/*.y*ml') if not f.endswith('_index.yml'))
         else: files.append(k)
     res = {}
