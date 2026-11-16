@@ -35,12 +35,12 @@ def spec_ops(path):
                         ops[str(op['operationId'])] = ({(p.get('name'), p.get('in')) for p in ps if 'name' in p} | {(n, 'path') for n in tpl},
                                                        {p.get('name') for p in ps if p.get('in') == 'path' and p.get('required', True)} | tpl,
                                                        any('$ref' in p for p in ps))
-        except Exception:
-            ops = None
             # An apiKey security scheme declares its header/query parameter too (Palo Alto IoT: X-Key-Id).
             keys = {(sc.get('name'), sc.get('in')) for sc in ((d.get('components') or {}).get('securitySchemes') or {}).values()
                     if isinstance(sc, dict) and sc.get('type') == 'apiKey'}
             ops = {k: (v[0] | keys, v[1], v[2]) for k, v in ops.items()}
+        except Exception:
+            ops = None
         _specs[path] = ops
     return _specs[path]
 
