@@ -37,6 +37,10 @@ def spec_ops(path):
                                                        any('$ref' in p for p in ps))
         except Exception:
             ops = None
+            # An apiKey security scheme declares its header/query parameter too (Palo Alto IoT: X-Key-Id).
+            keys = {(sc.get('name'), sc.get('in')) for sc in ((d.get('components') or {}).get('securitySchemes') or {}).values()
+                    if isinstance(sc, dict) and sc.get('type') == 'apiKey'}
+            ops = {k: (v[0] | keys, v[1], v[2]) for k, v in ops.items()}
         _specs[path] = ops
     return _specs[path]
 
@@ -51,7 +55,9 @@ CRED = re.compile(r'^(auth\w*|api[-_]?key|apikey|key|token|access[-_]?token|bear
 # SigV4 / AWS protocol headers a signer or SDK sets (X-Amz-Date, X-Amz-Target). Idempotency-Key, If-Match and
 # OpenAI-Beta are NOT here: those are real headers an operation should declare.
 CRED_ANY = re.compile(r'(api[-_]?key|apikey|[-_]token$|subscription[-_]key|access[-_]key|logontoken|^fastly-key$|^session$|^cookie$|^x-amz-(date|content-sha256|security-token|target)$)', re.I)
-def is_cred(n, i='header'): return bool(CRED.match(n) or (i == 'header' and CRED_ANY.search(n)))
+# OpenAPI 3: header parameters named Accept, Content-Type or Authorization SHALL be ignored, so no operation can declare them.
+RESERVED = {'accept', 'content-type', 'authorization'}
+def is_cred(n, i='header'): return (i == 'header' and n.lower() in RESERVED) or bool(CRED.match(n) or (i == 'header' and CRED_ANY.search(n)))
 INCLUDE_CREDENTIALS = False
 
 def check(path):
