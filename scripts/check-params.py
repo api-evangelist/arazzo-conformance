@@ -99,7 +99,8 @@ def repair(path, problems, log):
         if not unk or not pr['missing']: continue
         mp = pairing(unk, pr['missing'])
         if not mp: log['unpaired'] += 1; continue
-        s = next((i for i, l in enumerate(lines) if re.match(rf'^\s*(- )?stepId:\s*[\'"]?{re.escape(str(pr["step"]))}[\'"]?\s*$', l)), None)
+        # The step's own definition is the list item `- stepId: X`; a bare `stepId: X` is a goto inside an action.
+        s = next((i for i, l in enumerate(lines) if re.match(rf'^\s*- stepId:\s*[\'"]?{re.escape(str(pr["step"]))}[\'"]?\s*$', l)), None)
         if s is None: continue
         ind = len(lines[s]) - len(lines[s].lstrip(' -'))
         e = s + 1
