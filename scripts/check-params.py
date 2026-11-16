@@ -47,6 +47,11 @@ def resolve(doc_path, url):
     return os.path.normpath(os.path.join(os.path.dirname(doc_path), url))
 
 CRED = re.compile(r'^(auth\w*|api[-_]?key|apikey|key|token|access[-_]?token|bearer|x-api[-\w]*|x-auth[-\w]*|client[-_]?(id|secret)|secret)$', re.I)
+# Vendor-named credentials (X-Vital-Api-Key, Api-Token, PRIVATE-TOKEN, Ocp-Apim-Subscription-Key, X-CSRF-Token) and the
+# SigV4 / AWS protocol headers a signer or SDK sets (X-Amz-Date, X-Amz-Target). Idempotency-Key, If-Match and
+# OpenAI-Beta are NOT here: those are real headers an operation should declare.
+CRED_ANY = re.compile(r'(api[-_]?key|apikey|[-_]token$|subscription[-_]key|access[-_]key|logontoken|^fastly-key$|^session$|^cookie$|^x-amz-(date|content-sha256|security-token|target)$)', re.I)
+def is_cred(n, i='header'): return bool(CRED.match(n) or (i == 'header' and CRED_ANY.search(n)))
 INCLUDE_CREDENTIALS = False
 
 def check(path):
@@ -71,7 +76,7 @@ def check(path):
             declared, req_path, _ = hit
             given = {(p.get('name'), p.get('in')) for p in st.get('parameters') or [] if isinstance(p, dict) and 'in' in p}
             unknown = sorted(f'{n}({i})' for n, i in given - declared
-                             if i in ('path', 'query', 'header') and (INCLUDE_CREDENTIALS or not CRED.match(str(n))))
+                             if i in ('path', 'query', 'header') and (INCLUDE_CREDENTIALS or not is_cred(str(n), i)))
             missing = sorted(req_path - {n for n, i in given if i == 'path'})
             if unknown or missing:
                 out.append({'step': st.get('stepId'), 'operationId': oid, 'unknown': unknown, 'missing': missing})
