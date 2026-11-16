@@ -27,8 +27,11 @@ def spec_ops(path):
                 for m, op in item.items():
                     if isinstance(op, dict) and op.get('operationId'):
                         ps = shared + [p for p in op.get('parameters') or [] if isinstance(p, dict)]
-                        ops[str(op['operationId'])] = ({(p.get('name'), p.get('in')) for p in ps if 'name' in p},
-                                                       {p.get('name') for p in ps if p.get('in') == 'path' and p.get('required', True)},
+                        # A route placeholder IS a path parameter, declared or not: some generated specs (AWS Smithy
+                        # conversions among them) template the route and never list it -- an OpenAPI defect, not the step's.
+                        tpl = set(re.findall(r'\{([^}+]+)\+?\}', route))
+                        ops[str(op['operationId'])] = ({(p.get('name'), p.get('in')) for p in ps if 'name' in p} | {(n, 'path') for n in tpl},
+                                                       {p.get('name') for p in ps if p.get('in') == 'path' and p.get('required', True)} | tpl,
                                                        any('$ref' in p for p in ps))
         except Exception:
             ops = None
